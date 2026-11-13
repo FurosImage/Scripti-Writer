@@ -1,0 +1,83 @@
+{
+  "name": "scripti",
+  "private": true,
+  "version": "0.2.1",
+  "description": "Scripti Writer: a free, open-source writing app for screenplays and novels.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,css}\"",
+    "desktop": "npm run build && electron .",
+    "mac": "npm run build && electron-builder --mac --publish never",
+    "win": "npm run build && electron-builder --win --publish never",
+    "installers": "npm run build && electron-builder --mac --win --publish never"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "main": "desktop/main.cjs",
+  "build": {
+    "appId": "app.scripti.desktop",
+    "productName": "Scripti Writer",
+    "copyright": "Copyright © 2026 FurosImage",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "desktop/**/*",
+      "package.json"
+    ],
+    "npmRebuild": false,
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "build/icon.png",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        }
+      ],
+      "identity": "-",
+      "hardenedRuntime": false,
+      "darkModeSupport": true
+    },
+    "dmg": {
+      "title": "Scripti Writer",
+      "artifactName": "Scripti-Writer-${version}-mac.dmg"
+    },
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Scripti Writer",
+      "artifactName": "Scripti-Writer-${version}-windows-setup.${ext}"
+    }
+  },
+  "author": "Scripti",
+  "license": "GPL-3.0-only"
+}

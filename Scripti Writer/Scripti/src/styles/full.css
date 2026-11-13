@@ -1,0 +1,1004 @@
+/* Styles for the full app: dialogs, library tools, side panel, status, focus mode,
+   and the phone / tablet layout. Loaded after app.css and board.css. */
+
+/* Safe areas (iPhone notch, home bar) and a page that never scrolls behind the app. */
+:root {
+  padding: 0;
+}
+html,
+body {
+  height: 100%;
+  overscroll-behavior: none;
+}
+#app {
+  height: 100dvh;
+  box-sizing: border-box;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px)
+    env(safe-area-inset-left, 0px);
+}
+
+/* ---------- top bar ---------- */
+summary {
+  white-space: nowrap;
+}
+.ttl {
+  border-color: transparent;
+  background: none;
+  font-weight: 600;
+  min-width: 80px;
+  flex: 0 1 260px;
+  text-overflow: ellipsis;
+}
+.ttl:hover,
+.ttl:focus {
+  border-color: var(--ln);
+}
+.st {
+  font-size: 12px;
+  color: var(--mu);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+.st:not(:empty):before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 6px;
+  background: var(--mu);
+  vertical-align: 1px;
+}
+.st.ok:before {
+  background: #4fb38a;
+}
+.st.warn:before {
+  background: #e0a458;
+}
+.st.bad {
+  color: #e57a87;
+}
+.st.bad:before {
+  background: #e57a87;
+}
+.dd button.danger,
+.ctxm .danger {
+  color: #e57a87;
+}
+
+/* Back to the library: always visible at the top left. */
+.homeb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px 5px 10px;
+  border-color: var(--ln);
+  background: var(--bg);
+  font-weight: 600;
+  white-space: nowrap;
+  flex: none;
+}
+.homeb:hover {
+  border-color: var(--ac);
+  color: var(--ac);
+}
+.homeb svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- draft tabs ---------- */
+.dt {
+  align-items: flex-end;
+  scrollbar-width: none;
+}
+.dt::-webkit-scrollbar {
+  display: none;
+}
+.dt .dtm {
+  margin-left: -4px;
+  padding: 5px 8px;
+  border-color: var(--ac);
+  background: var(--bg);
+  color: var(--tx);
+}
+.tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+.tab {
+  white-space: nowrap;
+}
+
+/* ---------- toolbars ---------- */
+.tb .tr {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+#stats {
+  white-space: nowrap;
+}
+.nb {
+  justify-content: center;
+}
+.nb .sp {
+  max-width: 24px;
+}
+.sidebtn {
+  display: none;
+}
+
+/* ---------- side panel: scenes, chapters, notes ---------- */
+.side {
+  max-height: calc(100dvh - 160px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.sideh {
+  display: none;
+}
+.nav {
+  list-style: none;
+  margin: 0 0 4px;
+  padding: 0;
+}
+.nav button {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: none;
+  padding: 5px 6px;
+  border-radius: 5px;
+  font:
+    600 12px/1.3 'Courier Prime',
+    monospace;
+  text-transform: uppercase;
+  color: var(--tx);
+}
+.nav button:hover,
+.nav button.cur {
+  background: color-mix(in srgb, var(--ac) 14%, transparent);
+}
+.nav button span {
+  color: var(--mu);
+  min-width: 18px;
+  font-weight: 400;
+}
+.nav li.sub button {
+  padding-left: 20px;
+  font-weight: 400;
+}
+.prose ~ * .nav button,
+#nv ~ .nav button {
+  text-transform: none;
+}
+.panes .side .nav button {
+  word-break: break-word;
+}
+.scrim {
+  display: none;
+}
+
+/* ---------- ideas ---------- */
+textarea.ideas {
+  width: 100%;
+  height: 68vh;
+  box-sizing: border-box;
+  font-size: 16px;
+  line-height: 1.6;
+  padding: 16px;
+}
+
+/* ---------- library ---------- */
+.libbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  max-width: 960px;
+  margin: 32px auto 0;
+  flex-wrap: wrap;
+}
+.libbar input[type='search'] {
+  flex: 1 1 200px;
+  max-width: 320px;
+}
+.grid {
+  margin-top: 16px;
+}
+.empty {
+  grid-column: 1/-1;
+  text-align: center;
+  margin: 24px 0;
+}
+.cov {
+  position: relative;
+}
+.cmenu {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 50%;
+  border: 0;
+  background: #0008;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.card:hover .cmenu,
+.card:focus-within .cmenu,
+.cmenu:focus-visible {
+  opacity: 1;
+}
+.lfoot {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 40px auto 0;
+  max-width: 960px;
+}
+.lnk {
+  border: 0;
+  background: none;
+  color: var(--mu);
+  font-size: 12px;
+  padding: 4px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.lnk:hover {
+  color: var(--tx);
+}
+
+/* ---------- menus and dialogs ---------- */
+.ctxm {
+  flex-direction: column;
+  padding: 4px;
+  min-width: 180px;
+  gap: 0;
+}
+.ctxm button {
+  border: 0;
+  background: none;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 5px;
+}
+.ctxm button:hover,
+.ctxm button:focus-visible {
+  background: var(--bg);
+}
+.modal > div {
+  max-width: min(440px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+.modal > div.wide {
+  max-width: min(560px, calc(100vw - 32px));
+}
+.mh {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.mh b {
+  font-size: 16px;
+}
+.modal .mh button {
+  padding: 2px 8px;
+  font-size: 18px;
+}
+.opts {
+  display: grid;
+  gap: 8px;
+}
+.opt {
+  text-align: left;
+  padding: 10px 12px;
+  display: grid;
+  gap: 2px;
+}
+.opt small {
+  color: var(--mu);
+}
+.opt.on {
+  border-color: var(--ac);
+  box-shadow: inset 0 0 0 1px var(--ac);
+}
+.eopts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  align-items: center;
+  margin-top: 6px;
+}
+.eopts label {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.mfoot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+.mfoot button {
+  text-align: center !important;
+  padding: 8px 16px !important;
+}
+.keys h3 {
+  font-size: 13px;
+  margin: 12px 0 6px;
+  color: var(--mu);
+  font-weight: 600;
+}
+.keys table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.keys td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--ln);
+  vertical-align: top;
+}
+.keys td:first-child {
+  white-space: nowrap;
+  width: 1%;
+}
+kbd {
+  font:
+    12px 'Instrument Sans',
+    sans-serif;
+  border: 1px solid var(--ln);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 1px 5px;
+  background: var(--bg);
+}
+.steps {
+  padding-left: 20px;
+  line-height: 1.7;
+}
+
+/* ---------- toast with Undo ---------- */
+.toast {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
+  bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+}
+.toast.act {
+  pointer-events: auto;
+}
+.toast button {
+  background: none;
+  border: 0;
+  color: var(--bg);
+  font-weight: 600;
+  text-decoration: underline;
+  padding: 2px 4px;
+}
+
+/* ---------- focus mode ---------- */
+body.focus .top,
+body.focus .tabs,
+body.focus .dt,
+body.focus .tb,
+body.focus .nb,
+body.focus .side,
+body.focus .rail {
+  display: none !important;
+}
+body.focus .page,
+body.focus .prose {
+  border-color: transparent;
+  background: transparent;
+}
+.fexit {
+  position: fixed;
+  top: calc(10px + env(safe-area-inset-top, 0px));
+  right: 12px;
+  z-index: 60;
+  opacity: 0.35;
+  transition: opacity 0.2s;
+}
+.fexit:hover,
+.fexit:focus-visible {
+  opacity: 1;
+}
+
+/* ---------- board extras ---------- */
+.cd .h b.sct {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 0;
+}
+.cd .h b.sct[contenteditable='true'] {
+  white-space: normal;
+  outline: 1px solid var(--ac);
+  border-radius: 3px;
+  padding: 0 3px;
+  background: var(--bg);
+}
+.cd .h b.sct:empty:before {
+  content: 'Scene heading';
+}
+
+/* ---------- characters toolbar ---------- */
+.chbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: -6px 0 16px;
+  flex-wrap: wrap;
+}
+.chbar button[disabled] {
+  opacity: 0.45;
+  cursor: default;
+}
+.chbar .danger {
+  color: #e57a87;
+}
+
+/* ---------- scene labels: "SCENE 1." before every heading ---------- */
+.page .b.scene {
+  padding-left: 4.75em;
+}
+.page .b.scene::before,
+.page .b.scene:empty::before {
+  content: 'SCENE';
+  position: absolute;
+  left: 0;
+  top: 0.75em;
+  font-size: 0.6em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--mu);
+}
+.page .b.scene::after {
+  display: block;
+  content: attr(data-n);
+  position: absolute;
+  left: 2.35em;
+  top: 0;
+  white-space: pre;
+  font-weight: 700;
+  color: var(--tx);
+  pointer-events: none;
+}
+.page .b.scene:empty::after {
+  content: attr(data-n) attr(data-ph);
+  color: var(--mu);
+}
+
+/* ---------- tool rail: labels, expand / collapse ---------- */
+.rail {
+  width: 60px;
+  gap: 1px;
+  padding: 6px 0;
+  transition: width 0.15s ease;
+  overflow-x: hidden;
+}
+.rail .rb {
+  box-sizing: border-box;
+  width: 54px;
+  height: auto;
+  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 3px 2px 4px;
+}
+/* Collapsed: a small name above each icon. */
+.rail .rb .rl-s {
+  order: -1;
+  font-size: 9px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--mu);
+  white-space: nowrap;
+}
+.rail .rb.on .rl-s,
+.rail .rb:hover .rl-s {
+  color: inherit;
+}
+.rail .rb .rl-l {
+  display: none;
+}
+.rail .rs {
+  flex: none;
+}
+.rail .zl {
+  width: 54px;
+  font-size: 11px;
+}
+.rail .zl .zv {
+  font-weight: 600;
+}
+.rtog {
+  color: var(--mu) !important;
+}
+.rail:not(.open) .rtog .rl-s {
+  display: none;
+}
+/* Expanded: icon and full name side by side. */
+.rail.open {
+  width: 176px;
+  align-items: stretch;
+  padding: 6px 8px;
+}
+.rail.open .rb {
+  width: 100%;
+  min-height: 34px;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 4px 10px;
+}
+.rail.open .rb .rl-s {
+  display: none;
+}
+.rail.open .rb .rl-l {
+  display: block;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rail.open .rb svg {
+  flex: none;
+}
+.rail.open .zl .zv {
+  min-width: 19px;
+  text-align: center;
+  font-size: 11px;
+}
+.rail.open .rs {
+  width: auto;
+  margin: 4px 6px;
+}
+
+/* ---------- touch screens ---------- */
+@media (pointer: coarse) {
+  input,
+  select,
+  textarea,
+  .b,
+  .tx,
+  .prose,
+  .tp {
+    font-size: max(16px, 1em);
+  }
+  button,
+  select,
+  summary {
+    min-height: 36px;
+  }
+  .ib {
+    min-width: 32px;
+    min-height: 32px;
+  }
+  .cmenu {
+    opacity: 1;
+  }
+  .sw {
+    width: 26px;
+    height: 26px;
+    min-height: 0;
+  }
+  .dot {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  .dot.an-t {
+    top: -11px !important;
+    left: calc(50% - 11px) !important;
+  }
+  .dot.an-b {
+    bottom: -11px !important;
+    left: calc(50% - 11px) !important;
+  }
+  .dot.an-l {
+    left: -11px !important;
+    top: calc(50% - 11px) !important;
+  }
+  .dot.an-r {
+    right: -11px !important;
+    top: calc(50% - 11px) !important;
+  }
+  .hdl {
+    width: 20px !important;
+    height: 20px !important;
+    margin: -4px;
+  }
+  .nh {
+    opacity: 1 !important;
+  }
+  .nt {
+    padding-top: 34px;
+  }
+  .nt.min {
+    padding-top: 8px;
+  }
+  .cd .h i {
+    display: none;
+  }
+}
+
+/* ---------- tablets and narrow windows ---------- */
+@media (max-width: 1100px) {
+  .tb {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .tb .tr {
+    display: flex !important;
+  }
+  .sidebtn {
+    display: inline-block;
+  }
+  .side {
+    display: block !important;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(340px, 86vw);
+    max-height: none;
+    z-index: 70;
+    background: var(--pn);
+    border-left: 1px solid var(--ln);
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box;
+    transform: translateX(105%);
+    transition: transform 0.2s ease;
+    box-shadow: -12px 0 32px #0005;
+  }
+  .side.open {
+    transform: none;
+  }
+  .sideh {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 4px;
+  }
+  .scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: #0006;
+    z-index: 65;
+  }
+}
+
+/* ---------- phones ---------- */
+@media (max-width: 700px) {
+  .menu {
+    padding: 32px 16px;
+  }
+  .menu h1 {
+    font-size: 44px;
+  }
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .top {
+    gap: 2px;
+    padding: 3px 6px;
+    flex-wrap: nowrap;
+  }
+  .top summary {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 0 7px;
+    font-size: 14px;
+    min-height: 34px;
+  }
+  .homeb {
+    padding: 4px 8px;
+    min-height: 34px;
+  }
+  .homeb span {
+    display: none;
+  }
+  .top .theme {
+    display: none;
+  }
+  .ttl {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 4px 6px;
+  }
+  .top .st {
+    max-width: 22px;
+    font-size: 0;
+  }
+  .top .st:before {
+    margin: 0;
+  }
+  .splitb {
+    display: none;
+  }
+  .tabs {
+    padding: 0 4px;
+  }
+  .tab {
+    padding: 5px 9px;
+    font-size: 14px;
+    min-height: 32px;
+  }
+  .dt {
+    padding: 3px 6px 0;
+    gap: 3px;
+  }
+  .dt button,
+  .dt .dtm {
+    padding: 3px 10px;
+    font-size: 13px;
+    min-height: 30px;
+  }
+  /* The bars above the toolbar slide away while scrolling down (phonebars.ts). */
+  #app.hidebars .top,
+  #app.hidebars .tabs,
+  #app.hidebars .dt {
+    display: none;
+  }
+  .panes {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0 0 140px;
+  }
+  .page {
+    border-width: 0 0 1px;
+    padding: 14px 12px 40px;
+    min-height: 70vh;
+  }
+  .b {
+    margin-bottom: 10px;
+  }
+  .page .b.scene {
+    padding-left: 4.2em;
+    margin-top: 18px;
+  }
+  .page .b:first-child {
+    margin-top: 0;
+  }
+  .page .b.scene::before,
+  .page .b.scene:empty::before {
+    font-size: 0.5em;
+    top: 0.85em;
+    letter-spacing: 0.04em;
+  }
+  .page .b.scene::after {
+    left: 1.9em;
+  }
+  .b.character {
+    margin-left: 30%;
+  }
+  .b.dialogue {
+    margin: 0 4% 10px 10%;
+  }
+  .b.parenthetical {
+    margin: 0 8% 0 18%;
+  }
+  .tb,
+  .nb {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 4px 6px;
+    gap: 4px;
+  }
+  .tb .ctr {
+    flex: 1;
+    min-width: 0;
+    gap: 4px;
+  }
+  .tb .ctr select,
+  .nb select {
+    flex: 1;
+    min-width: 0;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  .tb button,
+  .nb button {
+    min-width: 34px;
+    min-height: 34px;
+    padding: 0 8px;
+    flex: none;
+  }
+  .tb .tr {
+    gap: 4px;
+  }
+  .tb .tlab,
+  #stats,
+  #wc,
+  .nb .sp {
+    display: none;
+  }
+  .nb {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nb::-webkit-scrollbar {
+    display: none;
+  }
+  .nb select {
+    flex: none;
+  }
+  .hd {
+    margin: 4px 0 10px;
+  }
+  .chbar {
+    margin: 0 0 10px;
+    gap: 6px;
+  }
+  .chbar button {
+    padding: 0 10px;
+  }
+  .cc {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .chc .row {
+    flex-wrap: wrap;
+  }
+  .chc .sws {
+    order: 5;
+    width: 100%;
+    gap: 8px;
+  }
+  .sideh .hint {
+    align-self: center;
+    margin-right: auto;
+  }
+  .wrap {
+    margin-top: 8px;
+    padding: 0 8px;
+  }
+  .prose {
+    padding: 14px 14px 40px;
+    border-width: 0 0 1px;
+  }
+  .tp {
+    padding: 80px 16px 40px;
+    border-width: 0 0 1px;
+  }
+  .hd h2 {
+    font-size: 24px;
+  }
+  .props {
+    top: auto;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  }
+  .rail {
+    width: 52px;
+  }
+  .rail .rb,
+  .rail .zl {
+    width: 48px;
+  }
+  .rail.open {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 30;
+    width: 168px;
+    box-shadow: 8px 0 24px #0006;
+  }
+  .rail.open .rb {
+    width: 100%;
+  }
+  .bwrap {
+    position: relative;
+  }
+}
+
+/* Library title: "Writer" set lighter beside the name. */
+.menu h1 .wr {
+  font-weight: 400;
+  font-style: italic;
+  color: var(--mu);
+}
+
+/* Update notice (desktop app): a small bar at the top right, out of the writing's way. */
+.upd {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 95;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  max-width: min(460px, calc(100vw - 24px));
+  box-sizing: border-box;
+  padding: 10px 12px 10px 16px;
+  background: var(--pn);
+  color: var(--tx);
+  border: 1px solid var(--ac);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  font-size: 14px;
+  line-height: 1.4;
+}
+.upd .msg {
+  flex: 1 1 100%;
+}
+.upd .go {
+  order: 1;
+}
+.upd .later {
+  order: 2;
+}
+.upd .pct {
+  order: 3;
+}
+.upd a {
+  order: 3;
+  margin-left: auto;
+  color: var(--ac);
+  white-space: nowrap;
+}
+.upd button {
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 7px;
+  border: 1px solid var(--ln);
+  background: transparent;
+  color: var(--tx);
+  font: inherit;
+  cursor: pointer;
+}
+.upd button.go {
+  background: var(--ac);
+  border-color: var(--ac);
+  color: var(--bg);
+  font-weight: 600;
+}
+.upd .pct {
+  font-variant-numeric: tabular-nums;
+  color: var(--mu);
+}
+@media (pointer: coarse) {
+  .upd button {
+    min-height: 36px;
+  }
+}
