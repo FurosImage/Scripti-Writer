@@ -109,14 +109,12 @@ export const TK = {
 
 export const LRE = /^(INT\.?\/EXT\.?|EXT\.?\/INT\.?|I\/E\.?|INT\.?|EXT\.?)\s+(.+?)(?:\s+-\s+.*)?$/;
 
-/** The version as people read it: '0.1.0-beta.1' → '0.1.0 Beta 1'. */
 /** The app's name as shown to writers. */
 export const APP_NAME = 'Scripti Writer';
 
 /**
- * Versions before 1.0.0 are betas and count up in small steps: 0.2.1, 0.2.2, 0.2.3 …
- * They are shown as "Beta 0.2.1". From 1.0.0 the plain number is shown.
- * (Older releases used names like 0.2.0-beta.1; those show as "Beta 0.2.0".)
+ * Versions before 1.0.0 are betas and count up in small steps: 0.0.1, 0.0.2, 0.0.3 …
+ * They are shown as "Beta 0.0.1". From 1.0.0 the plain number is shown.
  */
 export const isBetaVersion = (v: string) => /^v?0\./.test(v) || /beta/i.test(v);
 export const versionLabel = (v: string) => {

@@ -1,0 +1,115 @@
+# Builds the Scripti Writer installers on GitHub's own Mac and Windows computers, so you need neither.
+#   Mac:     Scripti-Writer-<version>-mac.dmg              (Apple Silicon and Intel)
+#   Windows: Scripti-Writer-<version>-windows-setup.exe    (64-bit Intel/AMD and ARM)
+#
+# Run it from the repository's Actions tab ("Build installers" → Run workflow). The files appear
+# under the run's "Artifacts" and on the repository's Releases page, as the version number in
+# Scripti/package.json.
+name: Build installers
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            target: --mac
+            name: Scripti-mac
+            files: Scripti/release/*.dmg
+          - os: windows-latest
+            target: --win
+            name: Scripti-windows
+            files: Scripti/release/*.exe
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: Scripti   # the folder that holds package.json
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run build
+      - run: npx electron-builder ${{ matrix.target }} --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: ${{ matrix.files }}
+
+  # Publishes both installers on the repository's Releases page (one release per version number in
+  # Scripti/package.json; running the build again for the same version replaces the files).
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: v
+        run: |
+          v=$(node -p "require('./Scripti/package.json').version")
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          # 0.x versions are betas: 0.0.1 is shown as "Beta 0.0.1". From 1.0.0 the plain number.
+          case "$v" in 0.*) label="Beta ${v%%-*}" ;; *) label="$v" ;; esac
+          echo "label=$label" >> "$GITHUB_OUTPUT"
+      - uses: actions/download-artifact@v4
+        with:
+          path: installers
+          merge-multiple: true
+      # SHA-256 fingerprints, so people can check that a download is the real file.
+      - id: sums
+        run: |
+          cd installers
+          sha256sum *.dmg *.exe > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+          {
+            echo 'list<<EOF'
+            sed -E 's/^([0-9a-f]+)  (.*)$/- `\2`  \n  `\1`/' SHA256SUMS.txt
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.v.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          name: Scripti Writer ${{ steps.v.outputs.label }}
+          make_latest: true
+          files: |
+            installers/*.dmg
+            installers/*.exe
+            installers/SHA256SUMS.txt
+          body: |
+            > **This is a beta.** Scripti Writer is still early, so you may run into bugs. Use
+            > **Back up all** in the library now and then to keep a copy of your stories.
+            > [Share feedback](https://github.com/FurosImage/Scripti-Writer/issues/new?template=feedback.yml) ·
+            > [Report a bug](https://github.com/FurosImage/Scripti-Writer/issues/new?template=bug_report.yml)
+
+            ## Download
+
+            - **Mac** (Apple Silicon and Intel): `Scripti-Writer-${{ steps.v.outputs.version }}-mac.dmg`
+            - **Windows** (64-bit, including ARM): `Scripti-Writer-${{ steps.v.outputs.version }}-windows-setup.exe`
+
+            Click the file under **Assets** below to download it.
+
+            ## Install
+
+            **Mac:** open the .dmg and drag Scripti Writer into Applications. The first time, macOS says it
+            can't verify the app: click **Done**, then **System Settings → Privacy & Security → Open Anyway**.
+
+            **Windows:** run the setup file. If "Windows protected your PC" appears, click
+            **More info → Run anyway**.
+
+            Updating never deletes your stories: install the new version over the old one.
+
+            ## Checksums (SHA-256)
+
+            To check a download: on Mac run `shasum -a 256 <file>` in Terminal, on Windows run
+            `Get-FileHash <file>` in PowerShell, and compare with the line below.
+
+            ${{ steps.sums.outputs.list }}

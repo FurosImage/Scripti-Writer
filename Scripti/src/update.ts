@@ -6,7 +6,7 @@
 import { APP_NAME, versionLabel } from './constants';
 import { esc, toast } from './utils';
 
-const RELEASES = 'https://api.github.com/repos/FurosImage/Scripti/releases/latest';
+const RELEASES = 'https://api.github.com/repos/FurosImage/Scripti-Writer/releases/latest';
 
 interface Desktop {
   platform: string;
@@ -23,7 +23,7 @@ interface Release {
 const desktop = (): Desktop | undefined => (window as any).scriptiDesktop;
 let shown = '';
 
-/** Compare versions like 0.1.0-beta.1 and 0.2.0: negative if a is older than b. */
+/** Compare versions like 0.0.1 and 0.0.2: negative if a is older than b. */
 export function compareVersions(a: string, b: string): number {
   const parse = (v: string) => {
     const [main, pre = ''] = v.replace(/^v/i, '').split('-');
@@ -70,7 +70,7 @@ function close() {
 
 function offer(rel: Release) {
   const b = banner();
-  const notes = /^https:\/\/github\.com\/FurosImage\/Scripti\//.test(rel.page)
+  const notes = /^https:\/\/github\.com\/FurosImage\/Scripti-Writer\//.test(rel.page)
     ? `<a href="${esc(rel.page)}" target="_blank" rel="noopener">What's new</a>`
     : '';
   b.innerHTML = `<span class="msg"><b>${esc(APP_NAME)} ${esc(rel.label)}</b> is available.</span>${notes}<button class="go">Download</button><button class="later" aria-label="Remind me next time">Later</button>`;

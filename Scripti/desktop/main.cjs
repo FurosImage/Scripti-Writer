@@ -12,9 +12,9 @@ let win = null;
 app.setPath('userData', path.join(app.getPath('appData'), 'Scripti'));
 
 /** Websites the app may open in the normal browser (the project's own pages). */
-const OPEN_OK = /^https:\/\/(github\.com\/FurosImage\/Scripti([\/?#]|$)|furosimage\.github\.io\/Scripti([\/?#]|$))/i;
+const OPEN_OK = /^https:\/\/(github\.com\/FurosImage\/Scripti-Writer([\/?#]|$)|furosimage\.github\.io\/Scripti-Writer([\/?#]|$))/i;
 /** Where update installers come from. */
-const UPDATE_OK = /^https:\/\/github\.com\/FurosImage\/Scripti\/releases\/download\/[^/]+\/[\w.-]+\.(dmg|exe)$/i;
+const UPDATE_OK = /^https:\/\/github\.com\/FurosImage\/Scripti-Writer\/releases\/download\/[^/]+\/[\w.-]+\.(dmg|exe)$/i;
 
 function openOutside(url) {
   if (OPEN_OK.test(url)) shell.openExternal(url);
@@ -114,10 +114,10 @@ function buildMenu() {
         cmd('Keyboard Shortcuts', undefined, 'help'),
         cmd('Check for Updates…', undefined, 'update'),
         { type: 'separator' },
-        { label: 'Scripti Writer Website', click: () => openOutside('https://furosimage.github.io/Scripti/') },
+        { label: 'Scripti Writer Website', click: () => openOutside('https://furosimage.github.io/Scripti-Writer/') },
         {
           label: 'Send Feedback or Report a Bug',
-          click: () => openOutside('https://github.com/FurosImage/Scripti/issues/new/choose'),
+          click: () => openOutside('https://github.com/FurosImage/Scripti-Writer/issues/new/choose'),
         },
       ],
     },

@@ -4,7 +4,7 @@
 // Node and Element accept any property. Tighten this (and remove these index signatures)
 // module by module as real types are added.
 
-/** App version from package.json, e.g. '0.1.0-beta.1' (set at build time). */
+/** App version from package.json, e.g. '0.0.1' (set at build time). */
 declare const __VERSION__: string;
 
 interface Node {

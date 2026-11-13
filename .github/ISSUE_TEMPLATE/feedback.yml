@@ -1,0 +1,24 @@
+name: Feedback or an idea
+description: Tell us what would make Scripti Writer better for your writing.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: Scripti Writer is in beta and every idea is read. Big or small, it all helps.
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your feedback or idea
+      description: What's missing, what gets in your way, or what you'd love Scripti Writer to do?
+    validations:
+      required: true
+  - type: dropdown
+    id: writing
+    attributes:
+      label: What do you mostly write?
+      options: [Screenplays, Novels, Both, Something else]
+  - type: textarea
+    id: why
+    attributes:
+      label: How would it help you?
+      description: Optional. A short example of when you'd use it helps a lot.

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://furosimage.github.io/Scripti-Writer/sitemap.xml

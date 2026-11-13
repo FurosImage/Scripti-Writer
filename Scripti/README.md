@@ -2,7 +2,7 @@
 
 This folder holds the source code of Scripti Writer, a quiet, distraction-free writing app for
 screenwriters and novelists. Writers download the Mac and Windows apps from the
-[Releases page](https://github.com/FurosImage/Scripti/releases/latest); see the [main README](../README.md) for that.
+[Releases page](https://github.com/FurosImage/Scripti-Writer/releases/latest); see the [main README](../README.md) for that.
 
 The same code also builds as a web app that runs in any modern browser (PC, Mac, iPhone, iPad,
 Android), installs like an app and works offline, if you host it yourself (see below). There is no
