@@ -1,0 +1,52 @@
+/* Colour tokens for the four looks: Dark (default), Light, Paper / Warm, Night Warm. */
+:root {
+  --bg: #0f1522;
+  --pn: #161e2d;
+  --tx: #dce4f0;
+  --mu: #8591a7;
+  --ln: #27324a;
+  --pg: #131a28;
+  --ac: #8db4f5;
+  --hl: #e8c46845;
+  --hlb: #d6b04a;
+  color-scheme: dark;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+body[data-th='light'] {
+  --bg: #f4f4f1;
+  --pn: #fff;
+  --tx: #161616;
+  --mu: #717171;
+  --ln: #dcdcdc;
+  --pg: #fff;
+  --ac: #a9680f;
+  --hl: #ffe08a;
+  --hlb: #c99400;
+  color-scheme: light;
+}
+body[data-th='paper'] {
+  --bg: #f4ebe1;
+  --pn: #ece1d3;
+  --tx: #2c2621;
+  --mu: #7a6e62;
+  --ln: #d6c7b4;
+  --pg: rgba(250, 245, 238, 0.55);
+  --ac: #7a4a2e;
+  --hl: #f1d48a99;
+  --hlb: #b7862a;
+  color-scheme: light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .12' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .3 0 0 0 0 .2 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23f)'/%3E%3C/svg%3E");
+}
+body[data-th='night'] {
+  --bg: #1e1915;
+  --pn: #27211b;
+  --tx: #e6d5c3;
+  --mu: #a08f7d;
+  --ln: #3a3029;
+  --pg: #241e19;
+  --ac: #e0a458;
+  --hl: #e0a45840;
+  --hlb: #e0a458;
+}

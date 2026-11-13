@@ -1,0 +1,477 @@
+/* Brainstorm board: canvas, items, tool rail, properties bar. */
+.acts {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.big {
+  padding: 13px 26px;
+  font-size: 16px;
+}
+#bd {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  background-image: radial-gradient(color-mix(in srgb, var(--mu) 55%, transparent) 1px, transparent 1.3px);
+}
+#bd.pan,
+#bd.pan * {
+  cursor: grab !important;
+}
+#cv {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+#lk {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+.ln {
+  stroke: var(--mu);
+  stroke-width: 2;
+  fill: none;
+}
+.hit {
+  stroke: transparent;
+  stroke-width: 14;
+  pointer-events: stroke;
+  cursor: pointer;
+}
+g.on .ln {
+  stroke: var(--ac);
+  stroke-width: 2.5;
+}
+#tmpl {
+  stroke-dasharray: 5 4;
+  stroke: var(--ac);
+}
+.lbl {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: var(--bg);
+  border: 1px solid var(--ln);
+  padding: 1px 7px;
+  border-radius: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.lbl input {
+  padding: 0 4px;
+  border: 0;
+  width: 140px;
+}
+.it {
+  position: absolute;
+}
+.it.sel {
+  outline: 2px solid var(--ac);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.nt {
+  width: 170px;
+  min-height: 130px;
+  padding: 14px 12px;
+  box-sizing: border-box;
+  cursor: move;
+  box-shadow: 0 3px 10px #0005;
+  line-height: 1.4;
+}
+.nt.white {
+  background: #fff;
+  color: #151515;
+}
+.nt.black {
+  background: #000;
+  color: #f2f2f2;
+  border: 1px solid #555;
+}
+.tx {
+  outline: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.beat .tx {
+  white-space: nowrap;
+}
+.beat .tx:empty:before {
+  content: 'Name this beat';
+}
+.nt .tx {
+  min-height: 96px;
+}
+.tx[contenteditable='true'] {
+  cursor: text;
+  user-select: text;
+}
+.tx:empty:before {
+  content: 'Double-click to write';
+  opacity: 0.45;
+}
+.cd .box {
+  background: var(--pn);
+  border: 1px solid var(--ac);
+  border-radius: 8px;
+  overflow: hidden;
+  resize: both;
+  min-width: 150px;
+  min-height: 36px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.cd.min .box {
+  resize: none;
+  height: auto !important;
+}
+.cd.min .bd {
+  display: none;
+}
+.cd .h {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 6px 6px 10px;
+  cursor: move;
+  border-bottom: 1px solid var(--ln);
+}
+.cd .h b {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cd .h i {
+  font-style: normal;
+  font-size: 11px;
+  color: var(--ac);
+  margin-right: 4px;
+}
+.cd .bd {
+  padding: 8px 10px;
+  overflow: auto;
+  flex: 1;
+  font-size: 13px;
+}
+.ib {
+  border: 0;
+  background: none;
+  padding: 0 5px;
+  color: var(--mu);
+}
+.dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ac);
+  border: 2px solid var(--bg);
+  cursor: crosshair;
+  opacity: 0;
+  transition: opacity 0.12s;
+  z-index: 2;
+}
+.beat {
+  width: max-content;
+  padding: 4px 12px;
+  border-radius: 14px;
+  border: 1.5px solid var(--ac);
+  background: var(--pn);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: move;
+}
+#mq {
+  position: absolute;
+  border: 1px solid var(--ac);
+  background: color-mix(in srgb, var(--ac) 12%, transparent);
+  display: none;
+  pointer-events: none;
+}
+.beats {
+  grid-template-columns: 1fr 1fr;
+  width: 380px;
+  max-height: 60vh;
+  overflow: auto;
+}
+.bhint {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  color: var(--mu);
+  font-size: 12px;
+  pointer-events: none;
+}
+.zg {
+  display: flex;
+  gap: 2px;
+}
+.zg button {
+  min-width: 34px;
+}
+.on.tool {
+  border-color: var(--ac);
+  color: var(--ac);
+}
+.bwrap {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+.bmain {
+  position: relative;
+}
+.rail {
+  width: 54px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 0;
+  border-right: 1px solid var(--ln);
+  background: var(--pn);
+  overflow-y: auto;
+}
+.rb {
+  width: 36px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid transparent;
+  background: none;
+  border-radius: 8px;
+  color: var(--tx);
+  flex: none;
+  cursor: pointer;
+}
+.rb:hover {
+  background: var(--bg);
+  border-color: transparent;
+}
+.rb.on {
+  background: color-mix(in srgb, var(--ac) 20%, transparent);
+  border-color: var(--ac);
+  color: var(--ac);
+}
+.rb svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.rs {
+  width: 24px;
+  border-top: 1px solid var(--ln);
+  margin: 3px 0;
+  flex: none;
+}
+.zl {
+  font-size: 11px;
+  width: 44px;
+}
+.fly > summary {
+  padding: 0;
+}
+.flyd {
+  position: fixed;
+  top: 0;
+  left: 0;
+  max-height: 70vh;
+  overflow: auto;
+}
+.fh {
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--mu);
+  font-weight: 400;
+}
+.props {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--pn);
+  border: 1px solid var(--ln);
+  border-radius: 10px;
+  padding: 6px 10px;
+  box-shadow: 0 8px 24px #0006;
+  flex-wrap: wrap;
+  max-width: calc(100% - 24px);
+}
+.props[hidden] {
+  display: none;
+}
+.props .sep {
+  width: 1px;
+  height: 20px;
+  background: var(--ln);
+}
+.pw {
+  width: 30px;
+  height: 26px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+.pw i {
+  display: block;
+  width: 16px;
+  background: var(--tx);
+  border-radius: 4px;
+}
+.pw.on {
+  border-color: var(--ac);
+}
+#bd.tool-pan {
+  cursor: grab;
+}
+#bd.tool-pencil,
+#bd.tool-rect,
+#bd.tool-ellipse,
+#bd.tool-tri,
+#bd.tool-line,
+#bd.tool-arrow,
+#bd.tool-darrow {
+  cursor: crosshair;
+}
+.lnit,
+.stroke,
+.tl {
+  pointer-events: none;
+}
+.hitp {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 14;
+  pointer-events: stroke;
+}
+.shape {
+  transform-origin: center;
+}
+.it.lnit.sel,
+.it.stroke.sel,
+.it.tl.sel,
+.it.shape.sel {
+  outline: 1px dashed var(--ac);
+  outline-offset: 3px;
+}
+.act {
+  position: absolute;
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 0 4px;
+  pointer-events: auto;
+  cursor: move;
+}
+.nh {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  display: flex;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.nt:hover .nh,
+.nt.sel .nh {
+  opacity: 1;
+}
+.nt .ib {
+  color: inherit;
+  opacity: 0.7;
+}
+.nt.min {
+  min-height: 0;
+  padding: 8px 48px 8px 12px;
+}
+.nt.min .tx {
+  min-height: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hdl {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  box-sizing: border-box;
+  background: #fff;
+  border: 2px solid var(--ac);
+  border-radius: 3px;
+  pointer-events: auto;
+  z-index: 6;
+}
+.h-nw {
+  left: -6px;
+  top: -6px;
+  cursor: nwse-resize;
+}
+.h-n {
+  left: calc(50% - 6px);
+  top: -6px;
+  cursor: ns-resize;
+}
+.h-ne {
+  right: -6px;
+  top: -6px;
+  cursor: nesw-resize;
+}
+.h-e {
+  right: -6px;
+  top: calc(50% - 6px);
+  cursor: ew-resize;
+}
+.h-se {
+  right: -6px;
+  bottom: -6px;
+  cursor: nwse-resize;
+}
+.h-s {
+  left: calc(50% - 6px);
+  bottom: -6px;
+  cursor: ns-resize;
+}
+.h-sw {
+  left: -6px;
+  bottom: -6px;
+  cursor: nesw-resize;
+}
+.h-w {
+  left: -6px;
+  top: calc(50% - 6px);
+  cursor: ew-resize;
+}
+.hdl.rot {
+  left: calc(50% - 6px);
+  top: -32px;
+  border-radius: 50%;
+  cursor: grab;
+}
+.hdl.rot:after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 10px;
+  height: 18px;
+  border-left: 1px solid var(--ac);
+}
