@@ -1,0 +1,39 @@
+name: Report a bug
+description: Something in Scripti Writer doesn't work as it should.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping make Scripti Writer better! Please don't paste private writing you don't want to be public, since issues are visible to everyone.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to make it happen again
+      placeholder: |
+        1. Open a screenplay
+        2. Click …
+        3. …
+  - type: dropdown
+    id: system
+    attributes:
+      label: Computer
+      options: [Mac, Windows, Other]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Scripti Writer version
+      description: Shown under Help → Keyboard shortcuts, for example Beta 0.0.1.
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or anything else
+      description: You can drag images in here.

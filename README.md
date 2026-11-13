@@ -9,7 +9,7 @@ Scripti Writer is a free, open-source writing app for screenplays and novels: a 
 distraction-free place to write, with industry-standard script formatting. It runs on Mac and
 Windows.
 
-**Website:** [furosimage.github.io/Scripti](https://furosimage.github.io/Scripti/)
+**Website:** [furosimage.github.io/Scripti-Writer](https://furosimage.github.io/Scripti-Writer/)
 
 ## Feedback wanted
 
@@ -65,8 +65,6 @@ real one.
   Use **Back up all** and **Import…** in the library to move stories or keep a copy.
 - **Updating never deletes your stories.** Install the new version over the old one. Uninstalling
   leaves your stories in place too. Make a backup before big updates anyway.
-- **Coming from "Scripti" 0.1.0?** Scripti Writer is the same app with a new name and opens your
-  existing stories. On a Mac you can delete the old "Scripti" app from Applications afterwards.
 - **Only import backups you trust.** Imported files are cleaned so they can't run code, but a
   backup from a stranger is still a stranger's file.
 
@@ -77,8 +75,7 @@ it, read the code, change it and share it. If you share it, changed or not, you 
 full source code under the same license, so every copy stays free and open.
 
 The name **Scripti Writer** and its logo are not covered by the license; see
-[TRADEMARK.md](TRADEMARK.md). Version 0.1.0 Beta 1 (called "Scripti") was released under the MIT
-License, and copies of that version keep it.
+[TRADEMARK.md](TRADEMARK.md).
 
 **Contributions are welcome.** Found a bug or have an idea? Open an
 [issue](../../issues/new/choose). To change something yourself, fork the repository, make your
@@ -88,8 +85,8 @@ shared under the GPL-3.0.
 ## Releasing a new version
 
 1. Upload the changed files into the `Scripti` folder (keep the same folder layout).
-2. Raise `"version"` in `Scripti/package.json` by one step: `0.2.1` → `0.2.2` → `0.2.3` …
-   Versions before `1.0.0` are shown as betas ("Beta 0.2.2"); `1.0.0` will be the first finished
+2. Raise `"version"` in `Scripti/package.json` by one step: `0.0.1` → `0.0.2` → `0.0.3` …
+   Versions before `1.0.0` are shown as betas ("Beta 0.0.2"); `1.0.0` will be the first finished
    release. The update notice in the app compares this number with the newest release.
 3. **Actions → Build installers → Run workflow**. The new version appears on the Releases page with
    its checksums, and installed copies start showing the update notice.
