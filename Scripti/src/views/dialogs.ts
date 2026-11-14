@@ -2,7 +2,7 @@
 import { exportFormats } from '../io/files';
 import { isIOS, isMacSafari } from '../io/pwa';
 import { autoBackupOn, canAutoBackup } from '../backup';
-import { APP_NAME, BUG_URL, BUILD_YEAR, FEEDBACK_URL, REPO_URL, SITE_URL, VERSION_LABEL } from '../constants';
+import { APP_NAME, BUG_URL, BUILD_YEAR, FEEDBACK_URL, REPO_URL, VERSION_LABEL } from '../constants';
 import { App } from '../state';
 import { esc, MOD } from '../utils';
 
@@ -101,7 +101,7 @@ ${desktop ? '<p><button data-a="updcheck">Check for updates</button></p>' : ''}
 <p class="arow">${ext(FEEDBACK_URL, 'Send feedback or an idea', 'pri')}${ext(BUG_URL, 'Report a bug')}</p>
 <h3>License</h3>
 <p class="hint">© ${BUILD_YEAR} ${APP_NAME}. Free software under the <a href="${REPO_URL}/blob/main/LICENSE" target="_blank" rel="noopener">GNU General Public License v3.0</a>: you may use, change and share it, and every copy stays free and open. It comes with no warranty.</p>
-<p class="arow">${ext(SITE_URL, 'Website')}${ext(REPO_URL, 'Source code')}</p></div>`,
+<p class="arow">${ext(REPO_URL, 'Source code')}</p></div>`,
   );
 }
 
