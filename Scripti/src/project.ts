@@ -1,5 +1,5 @@
 // Creating, opening and cleaning up projects, plus syncing locations and characters from the script.
-import { COLS, COV, TYPES } from './constants';
+import { COLS, COV, PALETTE, TYPES } from './constants';
 import { cleanBoardList, cleanHTML, safeCss, safeFont, safeId, safeImage } from './io/clean';
 import { App, changeHooks, persist, save } from './state';
 import { charMatch, cue, locOf, titleCase, toast, uid } from './utils';
@@ -105,6 +105,9 @@ export function normalize(p: any) {
       m: str(c.m),
       g: str(c.g),
       d: str(c.d),
+      ge: str(c.ge),
+      ac: str(c.ac),
+      pal: PALETTE.map((d, j) => (Array.isArray(c.pal) && /^#[0-9a-f]{6}$/i.test(c.pal[j]) ? c.pal[j] : d)),
       col: safeCss(c.col, COLS[i % COLS.length]),
     }));
   p.locs = (Array.isArray(p.locs) ? p.locs : [])
@@ -250,7 +253,7 @@ export function leaveBlock(k?: any) {
       !/^(V\.?O\.?|O\.?S\.?|CONT'?D)$/.test(c) &&
       !App.P.chars.some((ch?: any) => charMatch(ch, c))
     ) {
-      App.P.chars.push({ id: uid(), n: titleCase(c), r: '', p: '', m: '', g: '', d: '', col: nextCharCol() });
+      App.P.chars.push({ id: uid(), n: titleCase(c), r: '', ge: '', ac: '', pal: [...PALETTE], p: '', m: '', g: '', d: '', col: nextCharCol() });
       toast(titleCase(c) + ' added to Characters');
     }
   }

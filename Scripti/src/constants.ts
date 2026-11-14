@@ -111,9 +111,10 @@ export const LRE = /^(INT\.?\/EXT\.?|EXT\.?\/INT\.?|I\/E\.?|INT\.?|EXT\.?)\s+(.+
 
 /** The app's name as shown to writers. */
 export const APP_NAME = 'Scripti Writer';
-/** The project's pages (source code, website, feedback forms). */
+/** A new character's five look colours (hair, skin, clothes…), all changeable. */
+export const PALETTE = ['#2e2a28', '#8a5a3c', '#d9b38c', '#3f5a7a', '#c4c0b8'];
+/** The project's pages (source code and feedback forms). */
 export const REPO_URL = 'https://github.com/FurosImage/Scripti-Writer';
-export const SITE_URL = 'https://furosimage.github.io/Scripti-Writer/';
 export const FEEDBACK_URL = REPO_URL + '/issues/new?template=feedback.yml';
 export const BUG_URL = REPO_URL + '/issues/new?template=bug_report.yml';
 /** Year shown in the copyright line (set when the version is built). */

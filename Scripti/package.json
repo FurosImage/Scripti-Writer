@@ -1,7 +1,7 @@
 {
   "name": "scripti",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Scripti Writer: a free, open-source writing app for screenplays and novels.",
   "type": "module",
   "scripts": {

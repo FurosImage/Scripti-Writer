@@ -108,10 +108,13 @@ export function storyBibleDocx(p: any, paper: 'letter' | 'a4') {
     for (const c of p.chars) {
       h(c.n || 'Unnamed character', 24, 200);
       para('Role', c.r);
+      para('Gender', c.ge);
+      para('Colours', (c.pal || []).join(', '));
+      para('Played by', c.ac);
       para('Personality', c.p);
       para('Motivation', c.m);
       para('Goal', c.g);
-      para('Notes', c.d);
+      para('Look and style', c.d);
     }
   }
   if (p.locs.length) {

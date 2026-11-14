@@ -98,7 +98,7 @@ function progress(e: { state: string; pct?: number; file?: string }) {
     } Your stories stay as they are.</span><button class="later">OK</button>`;
     b.querySelector<HTMLButtonElement>('.later')!.onclick = close;
   } else {
-    b.innerHTML = `<span class="msg">The download didn't finish. Try again later, or download it from the website.</span><button class="later">OK</button>`;
+    b.innerHTML = `<span class="msg">The download didn't finish. Try again later, or download it from the Releases page on GitHub.</span><button class="later">OK</button>`;
     b.querySelector<HTMLButtonElement>('.later')!.onclick = close;
   }
 }

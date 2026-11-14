@@ -9,8 +9,6 @@ Scripti Writer is a free, open-source writing app for screenplays and novels: a 
 distraction-free place to write, with industry-standard script formatting. It runs on Mac and
 Windows.
 
-**Website:** [furosimage.github.io/Scripti-Writer](https://furosimage.github.io/Scripti-Writer/)
-
 ## Feedback wanted
 
 Scripti Writer is in beta, and I'd love to hear how to make it better.
@@ -24,7 +22,8 @@ Scripti Writer is in beta, and I'd love to hear how to make it better.
   Scene headings are numbered automatically ("SCENE 1. INT. LOCATION - DAY").
 - **Novel editor** with chapters, scene breaks and a chapter list.
 - **Drafts** side by side in split screen, with undo and redo.
-- **Characters and locations** that fill in from the script, with colour coding.
+- **Characters and locations** that fill in from the script, with colour coding. Each character
+  has a card for role, gender, actor, hair colour, personality, motivation, goal and notes.
 - **Corkboard** and a **brainstorm board**: sticky notes, scene and character cards, shapes,
   pencil, arrows, story beats and an act timeline.
 - **Export** to PDF (industry page format), Word, Final Draft (.fdx), Fountain and text, or
@@ -103,7 +102,6 @@ Scripti/                      The app (source code, see Scripti/README.md for de
   desktop/                    Mac and Windows app window and menu bar
   public/                     Icons and offline support
   docs/SPEC.md                Product specification
-docs/                         The website (GitHub Pages)
 LICENSE                       GNU General Public License v3.0
 TRADEMARK.md                  About the name and logo
 .github/workflows/

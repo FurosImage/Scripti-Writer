@@ -161,7 +161,7 @@ function buildMenu() {
         cmd('Check for Updates…', undefined, 'update'),
         ...(isMac ? [] : [cmd('About Scripti Writer', undefined, 'about')]),
         { type: 'separator' },
-        { label: 'Scripti Writer Website', click: () => openOutside('https://furosimage.github.io/Scripti-Writer/') },
+        { label: 'Source Code', click: () => openOutside('https://github.com/FurosImage/Scripti-Writer') },
         {
           label: 'Send Feedback or Report a Bug',
           click: () => openOutside('https://github.com/FurosImage/Scripti-Writer/issues/new/choose'),

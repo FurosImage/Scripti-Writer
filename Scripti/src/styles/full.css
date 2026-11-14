@@ -1176,3 +1176,69 @@ body.focus .prose {
   background-color: #f5b83d;
   color: #1a1408;
 }
+
+/* Character card fields as a grid: short facts in a row, longer text below. */
+.chgrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px 12px;
+}
+.chgrid .fl {
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+.chgrid .fl > span {
+  padding: 0;
+  font-size: 12px;
+}
+.chgrid .fl input,
+.chgrid .fl textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+.chgrid.long {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 860px) {
+  .chgrid.long {
+    grid-template-columns: 1fr;
+  }
+}
+.chgrid .fl.full {
+  grid-column: 1 / -1;
+}
+/* Look and style: five colour swatches (hair, skin, clothes…) above the description. */
+.pals {
+  display: flex;
+  gap: 6px;
+  max-width: 320px;
+}
+.pals input[type='color'] {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 36px;
+  padding: 2px;
+  border: 1px solid var(--ln);
+  border-radius: 7px;
+  background: var(--bg);
+  cursor: pointer;
+}
+.pals input[type='color']::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.pals input[type='color']::-webkit-color-swatch {
+  border: 0;
+  border-radius: 5px;
+}
+.pals input[type='color']::-moz-color-swatch {
+  border: 0;
+  border-radius: 5px;
+}
+@media (max-width: 700px) {
+  .chgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.chgrid .fl textarea {
+  min-height: 76px;
+}

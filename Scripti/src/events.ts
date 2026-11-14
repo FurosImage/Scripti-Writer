@@ -3,7 +3,7 @@ import { addC, bsnap, bstep, delSel, editTx, goScene, nextPos, refreshSel, zoomA
 import { drawLinks, editLabel } from './board/links';
 import { minable, props, selObjs, selTl } from './board/props';
 import { board, findO, tf, updRail } from './board/render';
-import { COLS, COV, NSEQ, TK } from './constants';
+import { COLS, COV, NSEQ, TK, PALETTE } from './constants';
 import { acAccept, acHide, acUpdate } from './editor/autocomplete';
 import { focusB } from './editor/caret';
 import { cpop, highlight } from './editor/comments';
@@ -208,7 +208,7 @@ document.addEventListener('click', (e?: any) => {
       break;
     case 'addch': {
       csnap();
-      const c = { id: uid(), n: '', r: '', p: '', m: '', g: '', d: '', col: nextCharCol() };
+      const c = { id: uid(), n: '', r: '', ge: '', ac: '', pal: [...PALETTE], p: '', m: '', g: '', d: '', col: nextCharCol() };
       App.P.chars.push(c);
       save();
       render();
@@ -695,7 +695,10 @@ document.addEventListener('input', (e?: any) => {
     const u = $('[data-a=chundo]');
     if (u) u.disabled = false;
     const c = App.P.chars.find((c?: any) => c.id == t.dataset.ch);
-    if (c) c[t.dataset.f] = t.value;
+    if (c && t.dataset.pi != null) {
+      c.pal = Array.isArray(c.pal) ? c.pal : [...PALETTE];
+      c.pal[+t.dataset.pi] = t.value;
+    } else if (c) c[t.dataset.f] = t.value;
     if (t.dataset.f == 'n') {
       const h = t.closest('.chc')?.querySelector('.chn');
       if (h) h.textContent = t.value || 'New character';
