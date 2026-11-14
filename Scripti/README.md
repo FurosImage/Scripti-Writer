@@ -25,8 +25,12 @@ official hosted web version yet.
   crafted file can't run code (`src/io/clean.ts`).
 - **Backups**: one file with every story; restoring never overwrites anything.
 - **Focus mode**, four looks (Dark, Light, Paper / Warm, Night Warm), keyboard shortcuts (press `?`).
+- **Find and replace** on the script and novel pages (`src/find.ts`).
+- **Automatic backups** (desktop app): one file per day in Documents/Scripti Writer Backups, the
+  last 14 kept (`src/backup.ts`, written by `desktop/main.cjs`).
 - **Update notice** (desktop app): checks GitHub for a newer release and offers a Download button.
   Nothing installs by itself (`src/update.ts`).
+- **About** dialog with the version, license and feedback links.
 
 ## Run it on your computer
 
@@ -121,6 +125,8 @@ src/
   events.ts             Global event handlers: clicks (data-a), typing, keyboard, menus
   actions.ts            Export/import, backups, menus, focus mode, side panel, install
   update.ts             Update notice for the desktop app
+  find.ts               Find and replace
+  backup.ts             Automatic backups for the desktop app
   views/                One file per screen, plus dialogs.ts for every dialog and menu
   editor/               Script editor: caret, undo/redo, autocomplete, hover cards, comments, keys
   board/                Brainstorm board: rendering, actions, links, pointer and touch gestures

@@ -28,6 +28,7 @@ import {
 } from './project';
 import { App, flush, persist, save } from './state';
 import { $, $$, hasMk, MOD, toast, uid } from './utils';
+import { closeFind, findOpen, openFind } from './find';
 import { cards } from './views/library';
 import { renumberScenes } from './views/script';
 import { refreshNav, render, stats, wc } from './views/workspace';
@@ -554,6 +555,10 @@ document.addEventListener('change', (e?: any) => {
     if (g) g.innerHTML = cards();
   } else if (c == 'exppaper') App.exp.paper = t.value;
   else if (c == 'exptp') App.exp.tpage = t.checked;
+  else if (c == 'ab') {
+    App.D.ab = t.checked;
+    persist();
+  }
   else if (c == 'expscn') App.exp.scn = t.checked;
 });
 
@@ -733,10 +738,19 @@ document.addEventListener('keydown', (e?: any) => {
     toggleFocus();
     return;
   }
+  if (mod && !e.shiftKey && !e.altKey && k == 'f' && App.P && !App.modal) {
+    e.preventDefault();
+    openFind();
+    return;
+  }
   if (e.key == 'Escape' && (App.modal || App.ctx)) {
     App.modal = null;
     App.ctx = null;
     render();
+    return;
+  }
+  if (e.key == 'Escape' && !App.AC && findOpen()) {
+    closeFind();
     return;
   }
   if (e.key == 'Escape' && !App.AC && App.side) {

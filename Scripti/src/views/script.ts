@@ -2,6 +2,7 @@
 import { PH, TYPES } from '../constants';
 import { cstyle, sceneList } from '../project';
 import { App } from '../state';
+import { findButton } from '../find';
 import { esc, hasMk, MOD } from '../utils';
 
 export function pane(d?: any, second?: any) {
@@ -63,6 +64,6 @@ export function script() {
   const two = App.split && App.P.drafts.length > 1;
   if (two && (App.d2 < 0 || App.d2 == App.dr || App.d2 >= App.P.drafts.length)) App.d2 = App.dr == 0 ? 1 : 0;
   return `<div class="bar tb"><div class="tbl"><button data-a="addscene" title="Add a new scene at the end" aria-label="Add scene">+<span class="tlab"> Scene</span></button></div><div class="ctr"><button data-a="u" data-keep title="Undo (${MOD}+Z)" aria-label="Undo">↶</button><button data-a="r" data-keep title="Redo (${MOD}+Shift+Z)" aria-label="Redo">↷</button>
-<select data-c="fmt" aria-label="Block type">${TYPES.map(([v, l]: any) => `<option value="${v}">${l}</option>`).join('')}</select><button data-a="cyc" data-keep title="Next block type (Tab)" aria-label="Next block type">⇥</button><button data-a="hl" data-keep title="Select text, then highlight and comment" aria-label="Highlight and comment">🖍</button></div><div class="tr"><span class="hint" id="stats"></span><button class="sidebtn" data-a="side" title="Scenes, notes and comments" aria-label="Scenes, notes and comments">☰</button></div></div>
+<select data-c="fmt" aria-label="Block type">${TYPES.map(([v, l]: any) => `<option value="${v}">${l}</option>`).join('')}</select><button data-a="cyc" data-keep title="Next block type (Tab)" aria-label="Next block type">⇥</button><button data-a="hl" data-keep title="Select text, then highlight and comment" aria-label="Highlight and comment">🖍</button>${findButton()}</div><div class="tr"><span class="hint" id="stats"></span><button class="sidebtn" data-a="side" title="Scenes, notes and comments" aria-label="Scenes, notes and comments">☰</button></div></div>
 <div class="main"><div class="panes">${pane(App.dr, false)}${two ? pane(App.d2, true) : ''}${side(sceneNav())}</div></div>`;
 }

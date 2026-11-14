@@ -31,8 +31,12 @@ Scripti Writer is in beta, and I'd love to hear how to make it better.
   everything at once in one folder. **Import** from Fountain and Final Draft.
 - **Highlights and comments**, focus mode, four looks (Dark, Light, Paper / Warm, Night Warm).
 - Works **offline**. Stories save automatically as you type.
+- **Find and replace** in scripts and novels. Renaming "Mara" also renames MARA.
+- **Automatic backups** (Mac and Windows apps): a copy of all your stories in a
+  "Scripti Writer Backups" folder, one file per day for the last two weeks.
 - **Update notice**: the app tells you when a new version is out. Nothing installs until you click
   Download.
+- **About** page with the version, license, and buttons to send feedback or report a bug.
 
 ## Download and install
 

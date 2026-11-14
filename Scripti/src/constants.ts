@@ -111,6 +111,13 @@ export const LRE = /^(INT\.?\/EXT\.?|EXT\.?\/INT\.?|I\/E\.?|INT\.?|EXT\.?)\s+(.+
 
 /** The app's name as shown to writers. */
 export const APP_NAME = 'Scripti Writer';
+/** The project's pages (source code, website, feedback forms). */
+export const REPO_URL = 'https://github.com/FurosImage/Scripti-Writer';
+export const SITE_URL = 'https://furosimage.github.io/Scripti-Writer/';
+export const FEEDBACK_URL = REPO_URL + '/issues/new?template=feedback.yml';
+export const BUG_URL = REPO_URL + '/issues/new?template=bug_report.yml';
+/** Year shown in the copyright line (set when the version is built). */
+export const BUILD_YEAR = __YEAR__;
 
 /**
  * Versions before 1.0.0 are betas and count up in small steps: 0.0.1, 0.0.2, 0.0.3 …
