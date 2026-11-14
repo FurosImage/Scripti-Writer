@@ -2,6 +2,7 @@
 // bar. Run with `npm run desktop`; package a Mac app with `npm run mac` (see README).
 const { app, BrowserWindow, Menu, shell, session, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
 const isMac = process.platform === 'darwin';
 const NAME = 'Scripti Writer';
@@ -15,6 +16,47 @@ app.setPath('userData', path.join(app.getPath('appData'), 'Scripti'));
 const OPEN_OK = /^https:\/\/(github\.com\/FurosImage\/Scripti-Writer([\/?#]|$)|furosimage\.github\.io\/Scripti-Writer([\/?#]|$))/i;
 /** Where update installers come from. */
 const UPDATE_OK = /^https:\/\/github\.com\/FurosImage\/Scripti-Writer\/releases\/download\/[^/]+\/[\w.-]+\.(dmg|exe)$/i;
+
+/**
+ * Automatic backups go in Documents/Scripti Writer Backups (or, if that folder can't be used, in
+ * the app's own data folder). One file per day; the newest KEEP files are kept.
+ */
+const BACKUP_NAME = /^Scripti Writer backup \d{4}-\d{2}-\d{2}\.json$/;
+const KEEP = 14;
+
+function backupDir() {
+  for (const base of [app.getPath('documents'), app.getPath('userData')]) {
+    const dir = path.join(base, 'Scripti Writer Backups');
+    try {
+      fs.mkdirSync(dir, { recursive: true });
+      fs.accessSync(dir, fs.constants.W_OK);
+      return dir;
+    } catch (e) {}
+  }
+  return null;
+}
+
+function saveBackup(name, json) {
+  if (typeof name !== 'string' || typeof json !== 'string' || !BACKUP_NAME.test(name)) return { ok: false };
+  const dir = backupDir();
+  if (!dir) return { ok: false };
+  try {
+    // Write beside the file, then swap it in, so a crash can't leave half a backup.
+    const file = path.join(dir, name);
+    fs.writeFileSync(file + '.part', json, 'utf8');
+    fs.renameSync(file + '.part', file);
+    const old = fs
+      .readdirSync(dir)
+      .filter((f) => BACKUP_NAME.test(f))
+      .sort()
+      .reverse()
+      .slice(KEEP);
+    for (const f of old) fs.unlinkSync(path.join(dir, f));
+    return { ok: true, dir };
+  } catch (e) {
+    return { ok: false };
+  }
+}
 
 function openOutside(url) {
   if (OPEN_OK.test(url)) shell.openExternal(url);
@@ -44,7 +86,8 @@ function buildMenu() {
           {
             label: app.name,
             submenu: [
-              { role: 'about' },
+              cmd('About Scripti Writer', undefined, 'about'),
+              cmd('Check for Updates…', undefined, 'update'),
               { type: 'separator' },
               { role: 'services' },
               { type: 'separator' },
@@ -65,6 +108,7 @@ function buildMenu() {
         { type: 'separator' },
         cmd('Export…', 'CmdOrCtrl+E', 'export', true),
         cmd('Back Up All Stories…', 'CmdOrCtrl+Shift+B', 'backup'),
+        cmd('Automatic Backups…', undefined, 'backups'),
         { type: 'separator' },
         cmd('Library', 'CmdOrCtrl+Shift+L', 'library'),
         { type: 'separator' },
@@ -82,6 +126,8 @@ function buildMenu() {
         { role: 'paste' },
         { role: 'pasteAndMatchStyle' },
         { role: 'selectAll' },
+        { type: 'separator' },
+        cmd('Find and Replace…', 'CmdOrCtrl+F', 'find', true),
         ...(isMac
           ? [
               { type: 'separator' },
@@ -113,6 +159,7 @@ function buildMenu() {
       submenu: [
         cmd('Keyboard Shortcuts', undefined, 'help'),
         cmd('Check for Updates…', undefined, 'update'),
+        ...(isMac ? [] : [cmd('About Scripti Writer', undefined, 'about')]),
         { type: 'separator' },
         { label: 'Scripti Writer Website', click: () => openOutside('https://furosimage.github.io/Scripti-Writer/') },
         {
@@ -193,6 +240,12 @@ else {
         return;
       }
       item.setSaveDialogOptions({ defaultPath: path.join(app.getPath('downloads'), item.getFilename()) });
+    });
+    ipcMain.handle('backup:save', (_e, name, json) => saveBackup(name, json));
+    ipcMain.handle('backup:open', () => {
+      const dir = backupDir();
+      if (dir) shell.openPath(dir);
+      return dir || '';
     });
     ipcMain.on('update:download', (e, url) => {
       if (typeof url !== 'string' || !UPDATE_OK.test(url)) return;

@@ -1,7 +1,8 @@
-// Dialogs: new story, export, keyboard shortcuts, install, and the small context menus.
+// Dialogs: new story, export, keyboard shortcuts, about, backups, install, and the small context menus.
 import { exportFormats } from '../io/files';
 import { isIOS, isMacSafari } from '../io/pwa';
-import { APP_NAME, VERSION_LABEL } from '../constants';
+import { autoBackupOn, canAutoBackup } from '../backup';
+import { APP_NAME, BUG_URL, BUILD_YEAR, FEEDBACK_URL, REPO_URL, SITE_URL, VERSION_LABEL } from '../constants';
 import { App } from '../state';
 import { esc, MOD } from '../utils';
 
@@ -61,6 +62,7 @@ export function helpDialog() {
       [`${mod}+Z`, 'Undo'],
       [`${mod}+Shift+Z`, 'Redo'],
       [`${mod}+S`, 'Save now'],
+      [`${mod}+F`, 'Find and replace'],
       [`${mod}+E`, 'Export'],
       [`${mod}+Shift+F`, 'Focus mode (Esc to leave)'],
       ['?', 'This list'],
@@ -77,8 +79,42 @@ export function helpDialog() {
       ['T', 'Timeline'],
       ['Delete', 'Remove selection'],
       [`${mod}+A`, 'Select everything'],
-    ])}</table><p class="hint">On a touch screen, drag with one finger to move around the board and pinch to zoom.</p><p class="hint ver">${APP_NAME} ${VERSION_LABEL}</p></div>`,
+    ])}</table><p class="hint">On a touch screen, drag with one finger to move around the board and pinch to zoom.</p></div>`,
     'wide',
+  );
+}
+
+const ext = (url: string, label: string, cls = '') =>
+  `<a class="abtn ${cls}" href="${url}" target="_blank" rel="noopener">${label}</a>`;
+
+/** About: what the app is, which version this is, its license, and where to send feedback. */
+export function aboutDialog() {
+  const desktop = !!(window as any).scriptiDesktop;
+  return shell(
+    `About ${APP_NAME}`,
+    `<div class="about"><img src="./icons/icon-192.png" alt="" width="72" height="72">
+<h2>${APP_NAME}</h2><p class="aver">${VERSION_LABEL}</p>
+<p>A quiet place to write screenplays and novels. Free and open source.</p>
+${desktop ? '<p><button data-a="updcheck">Check for updates</button></p>' : ''}
+<h3>Feedback</h3>
+<p class="hint">${APP_NAME} is in beta, so you may run into bugs. Ideas and reports make it better. Both open a short form on GitHub (needs a free account).</p>
+<p class="arow">${ext(FEEDBACK_URL, 'Send feedback or an idea', 'pri')}${ext(BUG_URL, 'Report a bug')}</p>
+<h3>License</h3>
+<p class="hint">© ${BUILD_YEAR} ${APP_NAME}. Free software under the <a href="${REPO_URL}/blob/main/LICENSE" target="_blank" rel="noopener">GNU General Public License v3.0</a>: you may use, change and share it, and every copy stays free and open. It comes with no warranty.</p>
+<p class="arow">${ext(SITE_URL, 'Website')}${ext(REPO_URL, 'Source code')}</p></div>`,
+  );
+}
+
+/** Automatic backups (desktop app): on or off, where they are, and a button to make one now. */
+export function backupsDialog() {
+  const D = App.D;
+  return shell(
+    'Automatic backups',
+    `<div class="about left"><p>${APP_NAME} keeps a copy of all your stories in a <b>Scripti Writer Backups</b> folder: one file per day, updated while you write, for the last two weeks.</p>
+<p><label class="chk"><input type="checkbox" data-c="ab" ${autoBackupOn() ? 'checked' : ''}> Back up automatically</label></p>
+<p class="hint">${D.abt ? `Last backup: ${esc(new Date(D.abt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }))}.` : 'No backup made yet.'}${D.abdir ? `<br>Folder: ${esc(D.abdir)}` : ''}</p>
+<p class="hint">To bring a backup back, use <b>Import…</b> in the library and choose one of the files.</p>
+<div class="mfoot"><button data-a="abopen">Open backup folder</button><button class="pri" data-a="abnow" ${D.ps.length ? '' : 'disabled'}>Back up now</button></div></div>`,
   );
 }
 
@@ -98,6 +134,8 @@ export function dialog() {
   if (App.modal == 'export' && App.P) return exportDialog();
   if (App.modal == 'help') return helpDialog();
   if (App.modal == 'install') return installDialog();
+  if (App.modal == 'about') return aboutDialog();
+  if (App.modal == 'backups' && canAutoBackup()) return backupsDialog();
   return '';
 }
 

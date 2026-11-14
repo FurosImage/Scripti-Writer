@@ -79,7 +79,8 @@ function offer(rel: Release) {
     const d = desktop();
     if (!d?.downloadUpdate) return void window.open(rel.page || rel.url, '_blank');
     b.innerHTML = `<span class="msg">Downloading ${esc(APP_NAME)} ${esc(rel.label)}…</span><span class="pct"></span>`;
-    d.downloadUpdate(rel.url);
+    // A fresh backup first, as a safety net (stories aren't touched by an update anyway).
+    import('./backup').then((m) => m.autoBackup(true)).finally(() => d.downloadUpdate!(rel.url));
   };
 }
 

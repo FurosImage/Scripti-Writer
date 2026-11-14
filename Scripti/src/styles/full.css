@@ -1002,3 +1002,177 @@ body.focus .prose {
     min-height: 36px;
   }
 }
+
+/* Version line under the library footer. */
+.lver {
+  margin: 6px 0 0;
+  text-align: center;
+}
+.lver .lnk {
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+/* About and backups dialogs. */
+.about {
+  max-width: 400px;
+  text-align: center;
+  line-height: 1.5;
+}
+.about.left {
+  text-align: left;
+}
+.about img {
+  display: block;
+  margin: 0 auto 8px;
+  border-radius: 16px;
+}
+.about h2 {
+  margin: 0;
+  font-family: Newsreader, Georgia, serif;
+  font-size: 26px;
+}
+.about .aver {
+  margin: 2px 0 10px;
+  color: var(--mu);
+}
+.about h3 {
+  margin: 16px 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mu);
+}
+.about p {
+  margin: 0 0 8px;
+}
+.about a {
+  color: var(--ac);
+}
+.about .arow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.abtn,
+.about p > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 14px !important;
+  border: 1px solid var(--ln);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--tx) !important;
+  font: inherit;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.abtn.pri {
+  background: var(--ac);
+  border-color: var(--ac);
+  color: var(--bg) !important;
+  font-weight: 600;
+}
+.about .chk {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  cursor: pointer;
+}
+.about .hint {
+  overflow-wrap: anywhere;
+}
+
+/* Find and replace bar. */
+.find {
+  position: fixed;
+  right: 12px;
+  z-index: 70;
+  display: grid;
+  gap: 6px;
+  width: min(380px, calc(100vw - 24px));
+  box-sizing: border-box;
+  padding: 8px;
+  background: var(--pn);
+  color: var(--tx);
+  border: 1px solid var(--ln);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  font-size: 14px;
+}
+.find .row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.find input {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 60px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--ln);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--tx);
+  font: inherit;
+}
+.find input:focus-visible {
+  outline: 2px solid var(--ac);
+  outline-offset: -1px;
+}
+.find .n {
+  min-width: 64px;
+  text-align: center;
+  color: var(--mu);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.find .n.none {
+  color: #d9534f;
+}
+.find button {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--tx);
+  font: inherit;
+  cursor: pointer;
+}
+.find button:hover:not(:disabled) {
+  background: var(--bg);
+}
+.find button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.find [data-f='one'],
+.find [data-f='all'] {
+  border-color: var(--ln);
+}
+.find [aria-pressed='true'] {
+  background: var(--ac);
+  color: var(--bg);
+}
+@media (pointer: coarse) {
+  .find input,
+  .find button {
+    height: 36px;
+    min-width: 36px;
+  }
+}
+::highlight(find) {
+  background-color: color-mix(in srgb, var(--ac) 30%, transparent);
+}
+::highlight(find-cur) {
+  background-color: #f5b83d;
+  color: #1a1408;
+}

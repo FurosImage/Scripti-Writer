@@ -9,6 +9,7 @@ import './board/touch';
 import { setupPwa } from './io/pwa';
 import { desktopMenu } from './actions';
 import { setupUpdates } from './update';
+import { setupBackups } from './backup';
 import { normalize } from './project';
 import { App, initData, persist, statusHooks } from './state';
 import { paintStatus, render } from './views/workspace';
@@ -40,6 +41,7 @@ async function boot() {
   (window as any).scriptiDesktop?.onMenu(desktopMenu);
   if ((window as any).scriptiDesktop) document.body.classList.add('desktop-app');
   setupUpdates();
+  setupBackups();
 }
 
 boot();

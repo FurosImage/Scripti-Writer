@@ -8,6 +8,7 @@ import { scriptStats } from '../io/screenplay';
 import { App } from '../state';
 import { $, $$, esc, words } from '../utils';
 import { showBars } from '../phonebars';
+import { findRefresh } from '../find';
 import { chars } from './characters';
 import { cork } from './corkboard';
 import { ctxMenu, dialog } from './dialogs';
@@ -38,7 +39,7 @@ export function work() {
 <button data-a="home">← Back to library</button><hr>
 <button data-a="expopen">Export…</button>${ms ? '<button data-a="impdraft">Import screenplay as new draft…</button>' : ''}<button data-a="bkone">Back up this story (.json)</button><hr>
 <button data-a="cover">Change cover colour</button><label class="mi" tabindex="0">Upload cover image…<input type="file" accept="image/*" data-c="img" hidden></label>${P.img ? '<button data-a="noimg">Remove cover image</button>' : ''}<hr>
-<button data-a="focus">Focus mode</button><button data-a="help">Keyboard shortcuts</button><hr>
+<button data-a="focus">Focus mode</button><button data-a="help">Keyboard shortcuts</button><button data-a="about">About</button><hr>
 <button data-a="delp" class="danger">Delete this story</button></div></details>
 <details><summary>View ▾</summary><div class="dd">${P.type != 'ideas' ? `<button data-a="split">${App.split ? 'Close split screen' : 'Split screen (two drafts)'}</button>` : ''}<button data-a="focus">Focus mode</button><hr>${THEMES.map(([v, l]: any) => `<button data-a="th" data-t="${v}" class="${App.D.th == v ? 'on' : ''}">${l}</button>`).join('')}</div></details>
 <input class="ttl" data-c="title" value="${esc(P.title)}" aria-label="Story title"><span class="sp"></span><span class="st" id="st"></span>
@@ -76,6 +77,7 @@ export function render() {
   wc();
   stats();
   paintStatus();
+  findRefresh();
   const m = $('.modal [role=dialog]');
   if (m) (m.querySelector('.opt.on,.pri,button.opt') || m.querySelector('button'))?.focus();
 }

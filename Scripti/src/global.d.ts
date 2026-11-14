@@ -6,6 +6,8 @@
 
 /** App version from package.json, e.g. '0.0.1' (set at build time). */
 declare const __VERSION__: string;
+/** Year of the build, e.g. '2026' (set at build time). */
+declare const __YEAR__: string;
 
 interface Node {
   [key: string]: any;

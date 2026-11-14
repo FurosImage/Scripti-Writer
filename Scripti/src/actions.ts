@@ -145,6 +145,33 @@ export async function extraAction(a: string, t: any) {
       App.modal = 'help';
       render();
       break;
+    case 'about':
+      App.ctx = null;
+      App.modal = 'about';
+      render();
+      break;
+    case 'backups':
+      App.modal = 'backups';
+      render();
+      break;
+    case 'abopen':
+      import('./backup').then((m) => m.openBackupFolder());
+      break;
+    case 'abnow': {
+      const m = await import('./backup');
+      const ok = await m.autoBackup(true);
+      render();
+      toast(ok ? 'Backup saved' : "The backup couldn't be saved.");
+      break;
+    }
+    case 'updcheck':
+      App.modal = null;
+      render();
+      import('./update').then((m) => m.checkForUpdate(true));
+      break;
+    case 'find':
+      import('./find').then((m) => m.openFind());
+      break;
     case 'install':
       if (!(await promptInstall())) {
         App.modal = 'install';
@@ -256,5 +283,13 @@ export function desktopMenu(a: string) {
       return render();
     case 'update':
       return void import('./update').then((m) => m.checkForUpdate(true));
+    case 'about':
+      App.modal = 'about';
+      return render();
+    case 'backups':
+      App.modal = 'backups';
+      return render();
+    case 'find':
+      return void import('./find').then((m) => m.openFind());
   }
 }

@@ -1,5 +1,6 @@
 // Main menu: story library.
-import { IS_BETA, TN } from '../constants';
+import { canAutoBackup } from '../backup';
+import { APP_NAME, IS_BETA, TN, VERSION_LABEL } from '../constants';
 import { canOfferInstall } from '../io/pwa';
 import { App } from '../state';
 import { ago, esc } from '../utils';
@@ -35,6 +36,7 @@ ${
 <div class="grid" id="grid">${cards()}</div>`
     : ''
 }
-<footer class="lfoot"><span class="st" id="st"></span><button class="lnk" data-a="help">Keyboard shortcuts</button>${canOfferInstall() ? '<button class="lnk" data-a="install">Install app</button>' : ''}</footer></div></div>
+<footer class="lfoot"><span class="st" id="st"></span><button class="lnk" data-a="help">Keyboard shortcuts</button>${canAutoBackup() ? '<button class="lnk" data-a="backups">Automatic backups</button>' : ''}${canOfferInstall() ? '<button class="lnk" data-a="install">Install app</button>' : ''}<button class="lnk" data-a="about">About</button></footer>
+<p class="lver"><button class="lnk" data-a="about" title="About ${APP_NAME}">${APP_NAME} ${VERSION_LABEL}</button></p></div></div>
 ${dialog()}${ctxMenu()}`;
 }
