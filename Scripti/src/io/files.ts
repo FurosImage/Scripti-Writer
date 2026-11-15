@@ -4,8 +4,8 @@ import { App, persist, changeHooks } from '../state';
 import { cue, slug, titleCase, toast, uid } from '../utils';
 import { render } from '../views/workspace';
 import { COLS, COV } from '../constants';
-import { manuscriptPdf, novelDocx, novelMarkdown, novelText, parseNovel } from './novel';
-import { linesToTpHtml, parseFDX, parseFountain, screenplayPdf, toFDX, toFountain } from './screenplay';
+import { manuscriptPdf, notesHtml, novelDocx, novelMarkdown, novelText, parseNovel } from './novel';
+import { linesToTpHtml, parseFDX, parseFountain, screenplayPdf, toFDX, toFountain, tpFoot } from './screenplay';
 import { zip } from './zip';
 import { screenplayDocx, storyPackage } from './package';
 
@@ -76,6 +76,7 @@ function singleFormats(type: string): [string, string, string][] {
       ['txt', 'Plain text (.txt)', 'Just the words'],
     ];
   return [
+    ['pdf', 'PDF', 'Your notes on clean pages, ready to print or share'],
     ['txt', 'Plain text (.txt)', 'Your notes as they are'],
     ['md', 'Markdown (.md)', 'For note apps like Obsidian or Bear'],
   ];
@@ -104,18 +105,18 @@ function screenplayTxt(blocks: any[]) {
     .join('\n');
 }
 
-export async function runExport() {
-  const P = App.P,
-    d = P.drafts[App.dr],
-    o = App.exp,
+/** Export a story in the chosen format: the open story by default, or any story in the library. */
+export async function runExport(P: any = App.P, dr: number = App.dr, fmt?: string) {
+  const d = P.drafts[Math.min(dr, P.drafts.length - 1)],
+    o = { ...App.exp, fmt: fmt || App.exp.fmt, foot: tpFoot(P.tp) },
     base = P.drafts.length > 1 ? `${slug(P.title)} - ${slug(d.name)}` : slug(P.title);
   try {
-    if (o.fmt == 'zip') return saveFile(slug(P.title) + '.zip', storyPackage(P, App.dr, o));
+    if (o.fmt == 'zip') return saveFile(slug(P.title) + '.zip', storyPackage(P, dr, o));
     if (P.type == 'ms') {
       if (o.fmt == 'docx') return saveFile(base + '.docx', screenplayDocx(P.title, P.tp.html, d.blocks, o));
       if (o.fmt == 'pdf') return saveFile(base + '.pdf', screenplayPdf(P.title, P.tp.html, d.blocks, o));
       if (o.fmt == 'fdx') return saveFile(base + '.fdx', toFDX(P.title, P.tp.html, d.blocks));
-      if (o.fmt == 'fountain') return saveFile(base + '.fountain', toFountain(P.title, P.tp.html, d.blocks));
+      if (o.fmt == 'fountain') return saveFile(base + '.fountain', toFountain(P.title, P.tp.html, d.blocks, P.tp));
       return saveFile(base + '.txt', P.title.toUpperCase() + '\n\n' + screenplayTxt(d.blocks));
     }
     if (P.type == 'novel') {
@@ -125,6 +126,8 @@ export async function runExport() {
       if (o.fmt == 'md') return saveFile(base + '.md', novelMarkdown(P.title, paras));
       return saveFile(base + '.txt', novelText(P.title, paras));
     }
+    if (o.fmt == 'pdf')
+      return saveFile(base + '.pdf', manuscriptPdf(P.title, '', parseNovel(notesHtml(P.ideas)), { ...o, tpage: false }));
     if (o.fmt == 'md') return saveFile(base + '.md', `# ${P.title}\n\n${P.ideas}\n`);
     return saveFile(base + '.txt', `${P.title}\n\n${P.ideas}\n`);
   } catch (e) {

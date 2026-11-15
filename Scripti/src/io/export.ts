@@ -44,8 +44,9 @@ export function exportTxt() {
   toast('Exported ' + name);
 }
 
-export function coverImg(f?: any) {
-  if (!f) return;
+/** Set a story's cover from a picture: the open story, or any story from the library. */
+export function coverImg(f?: any, p: any = App.P) {
+  if (!f || !p) return;
   const r = new FileReader();
   r.onload = () => {
     const im = new Image();
@@ -56,7 +57,9 @@ export function coverImg(f?: any) {
       const x = c.getContext('2d'),
         s = Math.max(300 / im.width, 400 / im.height);
       x.drawImage(im, (300 - im.width * s) / 2, (400 - im.height * s) / 2, im.width * s, im.height * s);
-      App.P.img = c.toDataURL('image/jpeg', 0.78);
+      p.img = c.toDataURL('image/jpeg', 0.78);
+      p.up = Date.now();
+      App.ctx = null;
       save();
       render();
       toast('Cover updated');

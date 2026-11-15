@@ -145,7 +145,7 @@ export function ctxMenu() {
   if (!c) return '';
   const pos = `left:${c.x}px;top:${c.y}px`;
   if (c.kind == 'card')
-    return `<div class="pop ctxm" style="${pos}" role="menu"><button data-a="open" data-id="${c.id}">Open</button><button data-a="cdup" data-id="${c.id}">Duplicate</button><button data-a="cexp" data-id="${c.id}">Export everything (.zip)</button><button data-a="cbk" data-id="${c.id}">Back up (.json)</button><button data-a="cdel" data-id="${c.id}" class="danger">Delete</button></div>`;
+    return `<div class="pop ctxm" style="${pos}" role="menu"><button data-a="open" data-id="${c.id}">Open</button><button data-a="cdup" data-id="${c.id}">Duplicate</button><button data-a="cpdf" data-id="${c.id}">Export PDF</button><button data-a="cexp" data-id="${c.id}">Export everything (.zip)</button><hr><label class="mi" tabindex="0" role="menuitem">Change cover image…<input type="file" accept="image/*" data-c="cimg" data-id="${c.id}" hidden></label><button data-a="ccol" data-id="${c.id}">Change cover colour</button>${App.D.ps.find((p: any) => p.id == c.id)?.img ? `<button data-a="cnoimg" data-id="${c.id}">Remove cover image</button>` : ''}<hr><button data-a="cbk" data-id="${c.id}">Back up (.json)</button><button data-a="cdel" data-id="${c.id}" class="danger">Delete</button></div>`;
   if (!App.P) return '';
   return `<div class="pop ctxm" style="${pos}" role="menu"><button data-a="dup">Duplicate</button><button data-a="rename">Rename</button>${App.P.drafts.length > 1 ? '<button data-a="del" class="danger">Delete</button>' : ''}</div>`;
 }

@@ -16,6 +16,8 @@ export interface AppState {
   dr: number;
   /** Split-screen on */
   split: boolean;
+  /** Novels and notes: show the two-page book view instead of the editor. */
+  book: boolean;
   /** Draft shown in the right-hand split pane */
   d2: number;
   /** Last focused script block */
@@ -80,6 +82,7 @@ export const App: AppState = {
   tab: 'Script',
   dr: 0,
   split: false,
+  book: false,
   d2: -1,
   F: { d: 0, i: 0 },
   modal: null,

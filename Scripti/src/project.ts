@@ -43,6 +43,10 @@ export function mk(type?: any) {
       html: '<h1>UNTITLED</h1><p>Written by</p>',
       font: type == 'novel' ? 'Newsreader' : 'Courier Prime',
       size: 20,
+      date: '',
+      mail: '',
+      copy: '',
+      prod: '',
     },
     up: Date.now(),
   });
@@ -94,6 +98,10 @@ export function normalize(p: any) {
     html: cleanHTML(tp.html),
     font: safeFont(tp.font, 'Courier Prime'),
     size: Math.max(10, Math.min(60, num(tp.size, 20))),
+    date: str(tp.date),
+    mail: str(tp.mail),
+    copy: str(tp.copy),
+    prod: str(tp.prod),
   };
   p.chars = (Array.isArray(p.chars) ? p.chars : [])
     .filter((c: any) => c && typeof c == 'object')

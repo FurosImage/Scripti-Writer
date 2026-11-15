@@ -1,6 +1,6 @@
 // Fixed lists and lookup tables shared across the app.
 
-export const TABS = ['Script', 'Title Page', 'Characters', 'Locations', 'Corkboard', 'Brainstorming'];
+export const TABS = ['Title Page', 'Script', 'Characters', 'Locations', 'Brainstorming', 'Corkboard'];
 
 export const TYPES = [
   ['scene', 'Scene Heading'],

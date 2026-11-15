@@ -17,8 +17,9 @@ document.addEventListener(
     });
     const r = d.getBoundingClientRect(),
       f = d.querySelector('.flyd');
-    f.style.left = r.right + 8 + 'px';
-    f.style.top = Math.max(8, Math.min(r.top, innerHeight - f.offsetHeight - 10)) + 'px';
+    // The tools sit at the bottom, so the menu opens above its button.
+    f.style.left = Math.max(8, Math.min(r.left, innerWidth - f.offsetWidth - 8)) + 'px';
+    f.style.top = Math.max(8, r.top - f.offsetHeight - 8) + 'px';
   },
   true,
 );

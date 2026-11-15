@@ -9,6 +9,7 @@ import { App } from '../state';
 import { $, $$, esc, words } from '../utils';
 import { showBars } from '../phonebars';
 import { findRefresh } from '../find';
+import { bookButton, bookView, paintPages } from '../pages';
 import { chars } from './characters';
 import { cork } from './corkboard';
 import { ctxMenu, dialog } from './dialogs';
@@ -31,24 +32,29 @@ export function work() {
     P.type == 'ideas'
       ? []
       : P.type == 'novel'
-        ? ['Script', 'Title Page', 'Characters', 'Locations', 'Brainstorming']
+        ? ['Title Page', 'Script', 'Characters', 'Locations', 'Brainstorming']
         : TABS;
   const showDr = P.type != 'ideas' && ['Script', 'Corkboard', 'Brainstorming'].includes(App.tab);
   const ms = P.type == 'ms';
-  return `<div class="bar top"><button class="homeb" data-a="home" title="Back to the library" aria-label="Back to the library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>Library</span></button><details><summary>${ms ? 'Script' : 'Story'} ▾</summary><div class="dd">
+  return `<div class="bar top"><button class="homeb" data-a="home" title="Back to the library" aria-label="Back to the library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>Library</span></button><details><summary>Settings ▾</summary><div class="dd">
 <button data-a="home">← Back to library</button><hr>
-<button data-a="expopen">Export…</button>${ms ? '<button data-a="impdraft">Import screenplay as new draft…</button>' : ''}<button data-a="bkone">Back up this story (.json)</button><hr>
 <button data-a="cover">Change cover colour</button><label class="mi" tabindex="0">Upload cover image…<input type="file" accept="image/*" data-c="img" hidden></label>${P.img ? '<button data-a="noimg">Remove cover image</button>' : ''}<hr>
-<button data-a="focus">Focus mode</button><button data-a="help">Keyboard shortcuts</button><button data-a="about">About</button><hr>
+${P.type != 'ideas' ? `<button data-a="split">${App.split ? 'Close split screen' : 'Split screen (two drafts)'}</button>` : ''}<button data-a="focus">Focus mode</button><hr>
+<span class="fh">Look</span>${THEMES.map(([v, l]: any) => `<button data-a="th" data-t="${v}" class="${App.D.th == v ? 'on' : ''}">${l}</button>`).join('')}<hr>
+<button data-a="help">Keyboard shortcuts</button><button data-a="about">About</button><hr>
 <button data-a="delp" class="danger">Delete this story</button></div></details>
-<details><summary>View ▾</summary><div class="dd">${P.type != 'ideas' ? `<button data-a="split">${App.split ? 'Close split screen' : 'Split screen (two drafts)'}</button>` : ''}<button data-a="focus">Focus mode</button><hr>${THEMES.map(([v, l]: any) => `<button data-a="th" data-t="${v}" class="${App.D.th == v ? 'on' : ''}">${l}</button>`).join('')}</div></details>
+<details><summary>Export ▾</summary><div class="dd">
+<button data-a="exppdf">Export PDF</button><button data-a="expopen">Export…</button><hr>
+<button data-a="bkone">Back up this story (.json)</button>${ms ? '<button data-a="impdraft">Import screenplay as new draft…</button>' : ''}</div></details>
 <input class="ttl" data-c="title" value="${esc(P.title)}" aria-label="Story title"><span class="sp"></span><span class="st" id="st"></span>
-<label class="theme" title="Look"><span aria-hidden="true">🎨</span><select data-c="th" aria-label="Look">${THEMES.map(([v, l]: any) => `<option value="${v}" ${App.D.th == v ? 'selected' : ''}>${l}</option>`).join('')}</select></label></div>
+<label class="theme" title="Look"><select data-c="th" aria-label="Look">${THEMES.map(([v, l]: any) => `<option value="${v}" ${App.D.th == v ? 'selected' : ''}>${l}</option>`).join('')}</select></label></div>
 ${
   P.type == 'ideas'
-    ? `<div class="main"><div class="wrap"><div class="hd"><h2>Story ideas</h2><span class="hint" id="iwc"></span></div><textarea class="ideas" data-c="ideas" placeholder="Raw notes and ideas…">${esc(P.ideas)}</textarea></div></div>`
+    ? App.book
+      ? `<div class="bar nb"><span class="sp"></span>${bookButton()}<span class="sp"></span></div>${bookView()}`
+      : `<div class="main"><div class="wrap"><div class="hd"><h2>Story ideas</h2><span class="hint" id="iwc"></span>${bookButton()}</div><textarea class="ideas" data-c="ideas" placeholder="Raw notes and ideas…">${esc(P.ideas)}</textarea></div></div>`
     : `
-<div class="bar tabs" role="tablist">${T.map((t?: any) => `<button class="tab ${t == App.tab ? 'on' : ''}" role="tab" aria-selected="${t == App.tab}" data-a="tab" data-t="${t}">${P.type == 'novel' && t == 'Script' ? 'Novel' : t}</button>`).join('')}<span class="sp"></span>${App.tab == 'Script' ? `<button data-a="split" class="splitb ${App.split ? 'on tool' : ''}" title="Split screen: show two drafts side by side">◫ Split</button>` : ''}</div>
+<div class="bar tabs"><span class="tside"></span><div class="tabset" role="tablist">${T.map((t?: any) => `<button class="tab ${t == App.tab ? 'on' : ''}" role="tab" aria-selected="${t == App.tab}" data-a="tab" data-t="${t}">${P.type == 'novel' && t == 'Script' ? 'Novel' : t}</button>`).join('')}</div><span class="tside r">${App.tab == 'Script' ? `<button data-a="split" class="splitb ${App.split ? 'on tool' : ''}" title="Split screen: show two drafts side by side">◫ Split</button>` : ''}</span></div>
 ${showDr ? `<div class="dt">${P.drafts.map((d?: any, i?: any) => (App.ren == i ? `<input id="rn" value="${esc(d.name)}" data-i="${i}" aria-label="Draft name">` : `<button class="${i == App.dr ? 'on' : ''}" data-a="dr" data-i="${i}" title="Double-click to rename">${esc(d.name)}</button>${i == App.dr ? `<button class="dtm" data-a="drmenu" data-i="${i}" aria-label="Options for ${esc(d.name)}" title="Duplicate, rename or delete">⋯</button>` : ''}`)).join('')}<button data-a="drnew" title="New blank draft" aria-label="New draft">+</button></div>` : ''}
 ${view()}`
 }${App.focus ? '<button class="fexit" data-a="focus" title="Leave focus mode (Esc)">Exit focus</button>' : ''}${dialog()}${ctxMenu()}`;
@@ -78,6 +84,7 @@ export function render() {
   stats();
   paintStatus();
   findRefresh();
+  paintPages();
   const m = $('.modal [role=dialog]');
   if (m) (m.querySelector('.opt.on,.pri,button.opt') || m.querySelector('button'))?.focus();
 }
