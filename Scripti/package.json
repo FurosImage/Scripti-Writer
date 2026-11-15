@@ -26,7 +26,7 @@
   "build": {
     "appId": "app.scripti.desktop",
     "productName": "Scripti Writer",
-    "copyright": "Copyright © 2026 FurosImage",
+    "copyright": "Copyright © 2026 Furos Image",
     "directories": {
       "output": "release",
       "buildResources": "build"
