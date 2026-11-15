@@ -95,12 +95,13 @@ export function aboutDialog() {
     `<div class="about"><img src="./icons/icon-192.png" alt="" width="72" height="72">
 <h2>${APP_NAME}</h2><p class="aver">${VERSION_LABEL}</p>
 <p>A quiet place to write screenplays and novels. Free and open source.</p>
+<p class="hint">Made by Marc Fussing Rosbach</p>
 ${desktop ? '<p><button data-a="updcheck">Check for updates</button></p>' : ''}
 <h3>Feedback</h3>
 <p class="hint">${APP_NAME} is in beta, so you may run into bugs. Ideas and reports make it better. Both open a short form on GitHub (needs a free account).</p>
 <p class="arow">${ext(FEEDBACK_URL, 'Send feedback or an idea', 'pri')}${ext(BUG_URL, 'Report a bug')}</p>
 <h3>License</h3>
-<p class="hint">© ${BUILD_YEAR} ${APP_NAME}. Free software under the <a href="${REPO_URL}/blob/main/LICENSE" target="_blank" rel="noopener">GNU General Public License v3.0</a>: you may use, change and share it, and every copy stays free and open. It comes with no warranty.</p>
+<p class="hint">© ${BUILD_YEAR} Marc Fussing Rosbach. Free software under the <a href="${REPO_URL}/blob/main/LICENSE" target="_blank" rel="noopener">GNU General Public License v3.0</a>: you may use, change and share it, and every copy stays free and open. It comes with no warranty.</p>
 <p class="arow">${ext(REPO_URL, 'Source code')}</p></div>`,
   );
 }
