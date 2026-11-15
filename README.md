@@ -21,13 +21,18 @@ Scripti Writer is in beta, and I'd love to hear how to make it better.
 - **Screenplay editor** with industry formatting. Enter moves to the next line type, Tab changes it.
   Scene headings are numbered automatically ("SCENE 1. INT. LOCATION - DAY").
 - **Novel editor** with chapters, scene breaks and a chapter list.
+- **Page numbers** that match the printed script, and a **two-page book view** for novels and
+  notes.
 - **Drafts** side by side in split screen, with undo and redo.
 - **Characters and locations** that fill in from the script, with colour coding. Each character
-  has a card for role, gender, actor, hair colour, personality, motivation, goal and notes.
+  has a card for role, gender, actor, personality, motivation, goal, and look and style with a
+  five-colour palette.
 - **Corkboard** and a **brainstorm board**: sticky notes, scene and character cards, shapes,
-  pencil, arrows, story beats and an act timeline.
+  pencil, arrows, story beats and an act timeline, with the tools in a floating toolbar.
+- **Title page** with produced by, copyright, date and email at the bottom.
 - **Export** to PDF (industry page format), Word, Final Draft (.fdx), Fountain and text, or
   everything at once in one folder. **Import** from Fountain and Final Draft.
+- **Covers**: change a story's cover image or colour, or export a PDF, right from the library.
 - **Highlights and comments**, focus mode, four looks (Dark, Light, Paper / Warm, Night Warm).
 - Works **offline**. Stories save automatically as you type.
 - **Find and replace** in scripts and novels. Renaming "Mara" also renames MARA.
