@@ -37,7 +37,8 @@ Scripti Writer is in beta, and I'd love to hear how to make it better.
 - Works **offline**. Stories save automatically as you type.
 - **Find and replace** in scripts and novels. Renaming "Mara" also renames MARA.
 - **Automatic backups** (Mac and Windows apps): a copy of all your stories in a
-  "Scripti Writer Backups" folder, one file per day for the last two weeks.
+  "Scripti Writer Backups" folder, or a folder you choose. One file per day for the last two
+  weeks, refreshed every ten minutes while you write.
 - **Update notice**: the app tells you when a new version is out. Nothing installs until you click
   Download.
 - **About** page with the version, license, and buttons to send feedback or report a bug.

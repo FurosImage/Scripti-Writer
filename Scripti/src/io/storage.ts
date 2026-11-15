@@ -1,45 +1,50 @@
 // Device storage: IndexedDB when available, localStorage as a fallback.
+//
+// Reading tells "nothing saved yet" apart from "couldn't read". When the saved stories can't be
+// read, the app must not start with an empty library and save that over them.
 
 const DB = 'scripti',
   STORE = 'kv',
   KEY = 'data';
 let idb: IDBDatabase | null = null;
 
-const timeout = <T>(p: Promise<T>, ms: number, v: T): Promise<T> =>
-  Promise.race([p, new Promise<T>((r) => setTimeout(() => r(v), ms))]);
+/** 'ok' = open; 'none' = this browser has no IndexedDB (localStorage is used); 'fail' = it didn't open. */
+export type OpenResult = 'ok' | 'none' | 'fail';
 
-export async function idbOpen() {
+export async function idbOpen(): Promise<OpenResult> {
+  if (typeof indexedDB == 'undefined') return 'none';
   try {
-    idb = await timeout(
-      new Promise<IDBDatabase | null>((res) => {
-        const r = indexedDB.open(DB, 1);
-        r.onupgradeneeded = () => r.result.createObjectStore(STORE);
-        r.onsuccess = () => res(r.result);
-        r.onerror = () => res(null);
-        r.onblocked = () => res(null);
-      }),
-      3000,
-      null,
-    );
+    return await new Promise<OpenResult>((res) => {
+      // A slow disk gets plenty of time; giving up early would look like an empty library.
+      const late = setTimeout(() => res('fail'), 20000);
+      const done = (r: OpenResult) => (clearTimeout(late), res(r));
+      const r = indexedDB.open(DB, 1);
+      r.onupgradeneeded = () => r.result.createObjectStore(STORE);
+      r.onsuccess = () => {
+        idb = r.result;
+        done('ok');
+      };
+      r.onerror = () => done('fail');
+      r.onblocked = () => done('fail');
+    });
   } catch (e) {
-    idb = null;
+    return 'fail';
   }
 }
 
-export async function idbRead(): Promise<any> {
-  if (!idb) return null;
+/** The saved data (null when nothing is saved yet). `ok` is false when it couldn't be read. */
+export async function idbRead(): Promise<{ ok: boolean; data: any }> {
+  if (!idb) return { ok: true, data: null };
   try {
-    return await timeout(
-      new Promise((res) => {
-        const r = idb!.transaction(STORE).objectStore(STORE).get(KEY);
-        r.onsuccess = () => res(r.result || null);
-        r.onerror = () => res(null);
-      }),
-      3000,
-      null,
-    );
+    return await new Promise((res) => {
+      const tx = idb!.transaction(STORE);
+      const r = tx.objectStore(STORE).get(KEY);
+      r.onsuccess = () => res({ ok: true, data: r.result || null });
+      r.onerror = () => res({ ok: false, data: null });
+      tx.onabort = () => res({ ok: false, data: null });
+    });
   } catch (e) {
-    return null;
+    return { ok: false, data: null };
   }
 }
 

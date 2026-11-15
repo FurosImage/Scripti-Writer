@@ -180,10 +180,22 @@ export async function extraAction(a: string, t: any) {
       App.modal = 'about';
       render();
       break;
-    case 'backups':
+    case 'backups': {
       App.modal = 'backups';
       render();
+      const m = await import('./backup');
+      if ((await m.loadBackupFolder()) && App.modal == 'backups') render();
       break;
+    }
+    case 'abdir': {
+      const m = await import('./backup');
+      const dir = await m.chooseBackupFolder();
+      if (dir) {
+        render();
+        toast('Backups are now saved in ' + dir);
+      }
+      break;
+    }
     case 'abopen':
       import('./backup').then((m) => m.openBackupFolder());
       break;
@@ -304,8 +316,7 @@ export function desktopMenu(a: string) {
       App.modal = 'about';
       return render();
     case 'backups':
-      App.modal = 'backups';
-      return render();
+      return void extraAction('backups', document.body);
     case 'find':
       return void import('./find').then((m) => m.openFind());
   }
