@@ -8,7 +8,7 @@ contextBridge.exposeInMainWorld('scriptiDesktop', {
   onMenu: (cb) => ipcRenderer.on('menu', (_e, action) => cb(action)),
   downloadUpdate: (url) => ipcRenderer.send('update:download', String(url)),
   onUpdate: (cb) => ipcRenderer.on('update', (_e, info) => cb(info)),
-  saveBackup: (name, json) => ipcRenderer.invoke('backup:save', String(name), String(json)),
+  saveBackup: (name, json, keep) => ipcRenderer.invoke('backup:save', String(name), String(json), Number(keep)),
   openBackups: () => ipcRenderer.invoke('backup:open'),
   chooseBackupDir: () => ipcRenderer.invoke('backup:choose'),
   backupDir: () => ipcRenderer.invoke('backup:dir'),

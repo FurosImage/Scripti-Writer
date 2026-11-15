@@ -20,8 +20,8 @@ const UPDATE_OK = /^https:\/\/github\.com\/FurosImage\/Scripti-Writer\/releases\
 
 /**
  * Automatic backups go in the folder the writer picked, or Documents/Scripti Writer Backups (or,
- * if neither can be used, in the app's own data folder). One file per day; the newest KEEP files
- * are kept.
+ * if neither can be used, in the app's own data folder). One file per day; the newest `keep` files
+ * are kept (the writer picks how many; KEEP if not), and older ones are deleted.
  */
 const BACKUP_NAME = /^Scripti Writer backup \d{4}-\d{2}-\d{2}\.json$/;
 const KEEP = 14;
@@ -80,7 +80,8 @@ async function chooseBackupDir() {
   return writeSettings({ ...readSettings(), backupDir: dir }) ? dir : '';
 }
 
-function saveBackup(name, json) {
+function saveBackup(name, json, keep) {
+  const n = Number.isInteger(keep) && keep >= 1 && keep <= 365 ? keep : KEEP;
   if (typeof name !== 'string' || typeof json !== 'string' || !BACKUP_NAME.test(name)) return { ok: false };
   const dir = backupDir();
   if (!dir) return { ok: false };
@@ -94,7 +95,7 @@ function saveBackup(name, json) {
       .filter((f) => BACKUP_NAME.test(f))
       .sort()
       .reverse()
-      .slice(KEEP);
+      .slice(n);
     for (const f of old) fs.unlinkSync(path.join(dir, f));
     return { ok: true, dir };
   } catch (e) {
@@ -316,7 +317,7 @@ else {
       }
       item.setSaveDialogOptions({ defaultPath: path.join(app.getPath('downloads'), item.getFilename()) });
     });
-    ipcMain.handle('backup:save', (_e, name, json) => saveBackup(name, json));
+    ipcMain.handle('backup:save', (_e, name, json, keep) => saveBackup(name, json, keep));
     ipcMain.handle('backup:choose', () => chooseBackupDir());
     ipcMain.handle('backup:dir', () => backupDir() || '');
     ipcMain.on('app:close-now', (e) => finishClose(BrowserWindow.fromWebContents(e.sender)));

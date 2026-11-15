@@ -1,16 +1,19 @@
 // Automatic backups (desktop app). A copy of every story is written to a "Scripti Writer Backups"
 // folder (in Documents, or a folder the writer picks): one file per day, refreshed while you write
-// (every 10 minutes unless the writer picks another time), with the last two weeks kept. To restore, use Import… in the library
+// (every 10 minutes unless the writer picks another time), keeping the newest ones (14 unless the writer picks another number). To restore, use Import… in the library
 // and pick one of the files.
 import { App, flush, persist } from './state';
 
 /** How often the day's backup file can be refreshed while you write, in minutes. */
 export const BACKUP_TIMES = [1, 5, 10, 30, 60];
 export const backupEvery = () => (BACKUP_TIMES.includes(App.D.abm) ? App.D.abm : 10);
+/** How many daily backup files to keep; older ones are deleted. */
+export const BACKUP_KEEP = [3, 7, 14, 30, 90];
+export const backupKeep = () => (BACKUP_KEEP.includes(App.D.abk) ? App.D.abk : 14);
 const CHECK_EVERY = 30e3;
 
 interface Desktop {
-  saveBackup?: (name: string, json: string) => Promise<{ ok: boolean; dir?: string }>;
+  saveBackup?: (name: string, json: string, keep?: number) => Promise<{ ok: boolean; dir?: string }>;
   openBackups?: () => Promise<string>;
   chooseBackupDir?: () => Promise<string>;
   backupDir?: () => Promise<string>;
@@ -41,7 +44,7 @@ export async function autoBackup(force = false): Promise<boolean> {
     const now = new Date();
     const day = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     const data = { app: 'scripti', version: 1, exported: now.toISOString(), ps: App.D.ps };
-    const r = await d.saveBackup(`Scripti Writer backup ${day}.json`, JSON.stringify(data));
+    const r = await d.saveBackup(`Scripti Writer backup ${day}.json`, JSON.stringify(data), backupKeep());
     if (!r?.ok) return false;
     App.D.abt = Date.now();
     App.D.abup = edited;
