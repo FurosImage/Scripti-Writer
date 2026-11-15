@@ -42,7 +42,7 @@ export function work() {
 <button data-a="cover">Change cover colour</button><label class="mi" tabindex="0">Upload cover image…<input type="file" accept="image/*" data-c="img" hidden></label>${P.img ? '<button data-a="noimg">Remove cover image</button>' : ''}<hr>
 ${P.type != 'ideas' ? `<button data-a="split">${App.split ? 'Close split screen' : 'Split screen (two drafts)'}</button>` : ''}<button data-a="focus">Focus mode</button><hr>
 <span class="fh">Look</span>${THEMES.map(([v, l]: any) => `<button data-a="th" data-t="${v}" class="${App.D.th == v ? 'on' : ''}">${l}</button>`).join('')}<hr>
-${canAutoBackup() ? '<button data-a="backups">Automatic backups and save folder…</button>' : ''}<button data-a="help">Keyboard shortcuts</button><button data-a="about">About</button><hr>
+${canAutoBackup() ? '<button data-a="backups">Automatic backups and save folder…</button>' : ''}<button data-a="help">Keyboard shortcuts</button>${(window as any).scriptiDesktop ? '<button data-a="updcheck">Check for updates</button>' : ''}<button data-a="about">About</button><hr>
 <button data-a="delp" class="danger">Delete this story</button></div></details>
 <details><summary>Export ▾</summary><div class="dd">
 <button data-a="exppdf">Export PDF</button><button data-a="expopen">Export…</button><hr>
