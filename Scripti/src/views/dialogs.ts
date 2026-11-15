@@ -95,7 +95,7 @@ export function aboutDialog() {
     `<div class="about"><img src="./icons/icon-192.png" alt="" width="72" height="72">
 <h2>${APP_NAME}</h2><p class="aver">${VERSION_LABEL}</p>
 <p>A quiet place to write screenplays and novels. Free and open source.</p>
-<p class="hint">Created by Marc Fussing Rosbach</p>
+<p class="hint">Created by Marc Fussing Rosbach, built with Claude</p>
 ${desktop ? '<p><button data-a="updcheck">Check for updates</button></p>' : ''}
 <h3>Feedback</h3>
 <p class="hint">${APP_NAME} is in beta, so you may run into bugs. Ideas and reports make it better. Both open a short form on GitHub (needs a free account).</p>
