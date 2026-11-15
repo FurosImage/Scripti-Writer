@@ -1,7 +1,7 @@
 // Dialogs: new story, export, keyboard shortcuts, about, backups, install, and the small context menus.
 import { exportFormats } from '../io/files';
 import { isIOS, isMacSafari } from '../io/pwa';
-import { autoBackupOn, canAutoBackup, canChooseFolder } from '../backup';
+import { autoBackupOn, BACKUP_TIMES, backupEvery, canAutoBackup, canChooseFolder } from '../backup';
 import { APP_NAME, BUG_URL, BUILD_YEAR, FEEDBACK_URL, REPO_URL, VERSION_LABEL } from '../constants';
 import { App } from '../state';
 import { esc, MOD } from '../utils';
@@ -111,8 +111,9 @@ export function backupsDialog() {
   const D = App.D;
   return shell(
     'Automatic backups',
-    `<div class="about left"><p>Your stories save by themselves as you type. ${APP_NAME} also keeps a copy of all of them as files in a folder you can choose: one file per day, updated every ten minutes while you write, for the last two weeks.</p>
+    `<div class="about left"><p>Your stories save by themselves as you type. ${APP_NAME} also keeps a copy of all of them as files in a folder you can choose: one file per day, updated while you write, for the last two weeks.</p>
 <p><label class="chk"><input type="checkbox" data-c="ab" ${autoBackupOn() ? 'checked' : ''}> Back up automatically</label></p>
+<p><label class="chk">Back up every <select data-c="abm">${BACKUP_TIMES.map((m) => `<option value="${m}" ${backupEvery() == m ? 'selected' : ''}>${m == 60 ? '1 hour' : m == 1 ? '1 minute' : m + ' minutes'}</option>`).join('')}</select></label></p>
 <p class="hint">${D.abt ? `Last backup: ${esc(new Date(D.abt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }))}.` : 'No backup made yet.'}</p>
 <p class="abdir"><span class="hint">Folder</span><b>${D.abdir ? esc(D.abdir) : 'Documents / Scripti Writer Backups'}</b>${canChooseFolder() ? '<button data-a="abdir">Change folder…</button>' : ''}</p>
 <p class="hint">To bring a backup back, use <b>Import…</b> in the library and choose one of the files.</p>

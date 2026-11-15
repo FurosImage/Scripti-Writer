@@ -578,6 +578,9 @@ document.addEventListener('change', (e?: any) => {
   else if (c == 'ab') {
     App.D.ab = t.checked;
     persist();
+  } else if (c == 'abm') {
+    App.D.abm = +t.value;
+    persist();
   }
   else if (c == 'expscn') App.exp.scn = t.checked;
 });

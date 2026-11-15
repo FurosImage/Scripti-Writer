@@ -1,12 +1,13 @@
 // Automatic backups (desktop app). A copy of every story is written to a "Scripti Writer Backups"
-// folder (in Documents, or a folder the writer picks): one file per day, refreshed every ten
-// minutes while you write, with the last two weeks kept. To restore, use Import… in the library
+// folder (in Documents, or a folder the writer picks): one file per day, refreshed while you write
+// (every 10 minutes unless the writer picks another time), with the last two weeks kept. To restore, use Import… in the library
 // and pick one of the files.
 import { App, flush, persist } from './state';
 
-/** The day's backup file is refreshed this often while you write. */
-const EVERY = 10 * 60e3;
-const CHECK_EVERY = 2 * 60e3;
+/** How often the day's backup file can be refreshed while you write, in minutes. */
+export const BACKUP_TIMES = [1, 5, 10, 30, 60];
+export const backupEvery = () => (BACKUP_TIMES.includes(App.D.abm) ? App.D.abm : 10);
+const CHECK_EVERY = 30e3;
 
 interface Desktop {
   saveBackup?: (name: string, json: string) => Promise<{ ok: boolean; dir?: string }>;
@@ -24,7 +25,7 @@ const newestEdit = () => App.D.ps.reduce((m: number, p: any) => Math.max(m, p.up
 
 /**
  * Write a backup now. Without `force` it only happens when automatic backups are on, something
- * changed since the last one, and the last one is at least an hour old.
+ * changed since the last one, and the chosen time has passed since the last one.
  */
 export async function autoBackup(force = false): Promise<boolean> {
   const d = desktop();
@@ -33,7 +34,7 @@ export async function autoBackup(force = false): Promise<boolean> {
   if (!force) {
     if (!autoBackupOn()) return false;
     if (edited <= (App.D.abup || 0)) return false;
-    if (Date.now() - (App.D.abt || 0) < EVERY) return false;
+    if (Date.now() - (App.D.abt || 0) < backupEvery() * 60e3) return false;
   }
   try {
     await flush();
