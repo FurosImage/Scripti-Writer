@@ -1,10 +1,10 @@
 // "Everything" export: one .zip folder with the story in every useful format, plus the Scripti
 // project file, so it can be read, edited and reopened on Windows, Mac and phones.
-import { manuscriptPdf, novelDocx, novelMarkdown, novelText, parseNovel, Para } from './novel';
-import { screenplayPdf, toFDX, toFountain, tpLines } from './screenplay';
+import { manuscriptPdf, notesHtml, novelDocx, novelMarkdown, novelText, parseNovel, Para } from './novel';
+import { screenplayPdf, toFDX, toFountain, tpFoot, tpLines } from './screenplay';
 import { zip } from './zip';
 
-type Opts = { paper: 'letter' | 'a4'; tpage: boolean; scn: boolean };
+type Opts = { paper: 'letter' | 'a4'; tpage: boolean; scn: boolean; foot?: string[] };
 type File = { name: string; data: string | Uint8Array };
 
 const slug = (s: string) => (s || 'Untitled').replace(/[\\/:*?"<>|]+/g, '-').trim() || 'Untitled';
@@ -69,6 +69,11 @@ export function screenplayDocx(title: string, tpHtml: string, blocks: any[], o: 
     L.forEach((l, i) =>
       P.push(
         `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="${i == 0 ? 4320 : 0}" w:after="${i == 0 ? 480 : 0}"/></w:pPr>${run(i == 0 ? l.toUpperCase() : l, COURIER, 24, i == 0)}</w:p>`,
+      ),
+    );
+    (o.foot || []).forEach((l, i) =>
+      P.push(
+        `<w:p><w:pPr><w:spacing w:before="${i == 0 ? 4320 : 0}" w:after="0"/></w:pPr>${run(l, COURIER, 24, false)}</w:p>`,
       ),
     );
     P.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
@@ -163,6 +168,7 @@ function screenplayText(title: string, blocks: any[]) {
 }
 
 function draftFiles(p: any, d: any, base: string, o: Opts, full: boolean): File[] {
+  o = { ...o, foot: tpFoot(p.tp) };
   if (p.type == 'ms') {
     const f: File[] = [
       { name: base + '.pdf', data: screenplayPdf(p.title, p.tp.html, d.blocks, o) },
@@ -171,7 +177,7 @@ function draftFiles(p: any, d: any, base: string, o: Opts, full: boolean): File[
     if (full)
       f.push(
         { name: base + '.fdx', data: toFDX(p.title, p.tp.html, d.blocks) },
-        { name: base + '.fountain', data: toFountain(p.title, p.tp.html, d.blocks) },
+        { name: base + '.fountain', data: toFountain(p.title, p.tp.html, d.blocks, p.tp) },
         { name: base + '.txt', data: crlf(screenplayText(p.title, d.blocks)) },
       );
     return f;
@@ -190,6 +196,7 @@ function draftFiles(p: any, d: any, base: string, o: Opts, full: boolean): File[
     return f;
   }
   return [
+    { name: base + '.pdf', data: manuscriptPdf(p.title, '', parseNovel(notesHtml(p.ideas)), { ...o, tpage: false }) },
     { name: base + '.txt', data: crlf(`${p.title}\n\n${p.ideas}\n`) },
     { name: base + '.md', data: `# ${p.title}\n\n${p.ideas}\n` },
   ];

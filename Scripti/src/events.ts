@@ -525,6 +525,9 @@ document.addEventListener('change', (e?: any) => {
     App.P.tp.font = t.value;
     save();
     render();
+  } else if (c == 'tpx') {
+    App.P.tp[t.dataset.f] = t.value;
+    save();
   } else if (c == 'tps') {
     App.P.tp.size = Math.max(10, Math.min(60, +t.value || 20));
     save();
@@ -548,6 +551,7 @@ document.addEventListener('change', (e?: any) => {
     document.execCommand('formatBlock', false, '<' + t.value + '>');
     t.value = 'p';
   } else if (c == 'img') coverImg(t.files[0]);
+  else if (c == 'cimg') coverImg(t.files[0], App.D.ps.find((p: any) => p.id == t.dataset.id));
   else if (c == 'sort') {
     App.D.sort = t.value;
     persist();

@@ -32,6 +32,19 @@ export function tpLines(html: string): string[] {
   return out;
 }
 
+/** The details at the bottom of a title page, as lines (empty ones left out). */
+export function tpFoot(tp: any): string[] {
+  if (!tp) return [];
+  const s = (v: any) => String(v || '').trim();
+  const copy = s(tp.copy);
+  return [
+    s(tp.prod) && 'Produced by ' + s(tp.prod),
+    copy && (/^(©|\(c\)|copyright)/i.test(copy) ? copy : '© ' + copy),
+    s(tp.date),
+    s(tp.mail),
+  ].filter(Boolean) as string[];
+}
+
 export const linesToTpHtml = (lines: string[]) =>
   lines.map((l, i) => (i == 0 ? `<h1>${escH(l)}</h1>` : `<p>${l ? escH(l) : '<br>'}</p>`)).join('');
 
@@ -91,7 +104,7 @@ export function wrap(text: string, w: number): string[] {
   return out;
 }
 
-type Row = { col: number; text: string; bold?: boolean; kind: string; scn?: number };
+type Row = { col: number; text: string; bold?: boolean; kind: string; scn?: number; bi?: number };
 type Unit = { gap: number; rows: Row[]; kind: string; keep?: boolean; name?: string };
 
 function units(blocks: Block[]): Unit[] {
@@ -103,14 +116,14 @@ function units(blocks: Block[]): Unit[] {
     if (!text) continue;
     if (b.t == 'character') {
       const name = text.toUpperCase();
-      const rows: Row[] = wrap(name, EL.character.w).map((t) => ({ col: 22, text: t, kind: 'character' }));
+      const rows: Row[] = wrap(name, EL.character.w).map((t) => ({ col: 22, text: t, kind: 'character', bi: i }));
       while (blocks[i + 1] && (blocks[i + 1].t == 'dialogue' || blocks[i + 1].t == 'parenthetical')) {
         const n = blocks[++i],
           e = EL[n.t];
         let t = (n.x || '').trim();
         if (!t) continue;
         if (n.t == 'parenthetical' && !/^\(.*\)$/s.test(t)) t = `(${t.replace(/^\(|\)$/g, '')})`;
-        for (const l of wrap(t, e.w)) rows.push({ col: e.col, text: l, kind: n.t });
+        for (const l of wrap(t, e.w)) rows.push({ col: e.col, text: l, kind: n.t, bi: i });
       }
       U.push({ gap: 1, rows, kind: 'dialogue', name: name.replace(/\s*\(CONT'?D\)\s*$/, '') });
       continue;
@@ -122,6 +135,7 @@ function units(blocks: Block[]): Unit[] {
       text: l,
       bold: b.t == 'scene',
       kind: b.t == 'dialogue' || b.t == 'parenthetical' ? 'action' : b.t,
+      bi: i,
     }));
     if (b.t == 'scene') rows[0].scn = ++scn;
     U.push({
@@ -201,6 +215,14 @@ export function paginate(blocks: Block[], lpp: number): Row[][][] {
   return pages;
 }
 
+/** For each printed page, the index of the script line it starts with. */
+export function pageStarts(blocks: Block[], lpp: number): number[] {
+  return paginate(blocks, lpp).map((pg) => {
+    for (const cell of pg) if (cell[0] && cell[0].bi != null) return cell[0].bi;
+    return -1;
+  });
+}
+
 export const linesPerPage = (paper: 'letter' | 'a4') => Math.floor((PAPER[paper].h - TOP * 2) / LH);
 
 export function scriptStats(blocks: Block[]) {
@@ -219,7 +241,7 @@ export function screenplayPdf(
   title: string,
   tpHtml: string,
   blocks: Block[],
-  o: { paper: 'letter' | 'a4'; tpage: boolean; scn: boolean },
+  o: { paper: 'letter' | 'a4'; tpage: boolean; scn: boolean; foot?: string[] },
 ) {
   const { w, h } = PAPER[o.paper];
   const lpp = linesPerPage(o.paper);
@@ -233,6 +255,9 @@ export function screenplayPdf(
       text: i == 0 ? t.toUpperCase() : t,
       font: (i == 0 ? 'B' : 'R') as any,
     }));
+    // Date, contact and rights go at the bottom left, as on a printed title page.
+    const F = o.foot || [];
+    F.forEach((t, i) => items.push({ x: X0, y: h - 72 - (F.length - 1 - i) * LH, text: t, font: 'R' as any }));
     out.push({ items });
   }
   paginate(blocks, lpp).forEach((pg, n) => {
@@ -276,12 +301,20 @@ function tpFields(title: string, tpHtml: string) {
   return f;
 }
 
-export function toFountain(title: string, tpHtml: string, blocks: Block[]) {
-  const out: string[] = [
-    tpFields(title, tpHtml)
-      .map(([k, v]) => `${k}: ${v}`)
-      .join('\n'),
-  ];
+export function toFountain(title: string, tpHtml: string, blocks: Block[], tp?: any) {
+  const f = tpFields(title, tpHtml);
+  const s = (v: any) => String(v || '').trim();
+  if (tp) {
+    if (s(tp.date)) {
+      const i = f.findIndex(([k]) => k == 'Draft date');
+      if (i >= 0) f[i][1] = s(tp.date);
+      else f.push(['Draft date', s(tp.date)]);
+    }
+    if (s(tp.mail)) f.push(['Contact', s(tp.mail)]);
+    if (s(tp.copy)) f.push(['Copyright', s(tp.copy)]);
+    if (s(tp.prod)) f.push(['Notes', 'Produced by ' + s(tp.prod)]);
+  }
+  const out: string[] = [f.map(([k, v]) => `${k}: ${v}`).join('\n')];
   for (let i = 0; i < blocks.length; i++) {
     const b = blocks[i];
     let t = blockText(b, true).trim();

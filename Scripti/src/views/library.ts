@@ -1,6 +1,6 @@
 // Main menu: story library.
 import { canAutoBackup } from '../backup';
-import { APP_NAME, IS_BETA, TN, VERSION_LABEL } from '../constants';
+import { APP_NAME, IS_BETA, THEMES, TN, VERSION_LABEL } from '../constants';
 import { canOfferInstall } from '../io/pwa';
 import { App } from '../state';
 import { ago, esc } from '../utils';
@@ -28,7 +28,7 @@ export function cards() {
 
 export function menu() {
   const many = App.D.ps.length > 3;
-  return `<div class="main"><div class="menu"><h1>Scripti <span class="wr">Writer</span>${IS_BETA ? '<span class="beta">Beta</span>' : ''}</h1><p class="sub">A quiet place to write.</p>
+  return `<div class="main"><label class="theme libth" title="Look"><select data-c="th" aria-label="Look">${THEMES.map(([v, l]: any) => `<option value="${v}" ${App.D.th == v ? 'selected' : ''}>${l}</option>`).join('')}</select></label><div class="menu"><h1>Scripti <span class="wr">Writer</span>${IS_BETA ? '<span class="beta">Beta</span>' : ''}</h1><p class="sub">A quiet place to write.</p>
 <div class="acts"><button class="big pri" data-a="new">Create new story</button><button class="big" data-a="lib">${App.D.lib ? 'Hide stories' : 'Open stories'}</button></div>
 ${
   App.D.lib

@@ -2,7 +2,7 @@
 // install, and board extras. Dispatched from the click switch in events.ts.
 import { editTx, goScene } from './board/actions';
 import { linkedScene } from './board/render';
-import { TYPES } from './constants';
+import { COV, TYPES } from './constants';
 import { bstep } from './board/actions';
 import { focusB } from './editor/caret';
 import { cstep } from './editor/charHistory';
@@ -18,7 +18,6 @@ import {
 import { promptInstall } from './io/pwa';
 import { deleteP, duplicateP, openP, sceneRef } from './project';
 import { App, flush, persist } from './state';
-import { IC } from './board/icons';
 import { $, $$, pickFile, toast } from './utils';
 import { render } from './views/workspace';
 
@@ -122,6 +121,37 @@ export async function extraAction(a: string, t: any) {
       }
       break;
     }
+    case 'cpdf': {
+      App.ctx = null;
+      render();
+      const p = App.D.ps.find((p: any) => p.id == id);
+      if (p) {
+        await flush();
+        runExport(p, p.drafts.length - 1, 'pdf');
+      }
+      break;
+    }
+    case 'ccol':
+    case 'cnoimg': {
+      const p = App.D.ps.find((p: any) => p.id == id);
+      if (p) {
+        if (a == 'ccol') p.cv = COV[(COV.indexOf(p.cv) + 1) % COV.length];
+        p.img = null;
+        p.up = Date.now();
+        persist();
+      }
+      App.ctx = null;
+      render();
+      break;
+    }
+    case 'book':
+      App.book = !App.book;
+      render();
+      break;
+    case 'exppdf':
+      await flush();
+      runExport(App.P, App.dr, 'pdf');
+      break;
     case 'cexp': {
       App.ctx = null;
       render();
@@ -210,19 +240,6 @@ export async function extraAction(a: string, t: any) {
       if (c) {
         const r = sceneRef(c);
         goScene(r.d, r.i);
-      }
-      break;
-    }
-    case 'railtog': {
-      App.D.rail = !App.D.rail;
-      persist();
-      const r = $('.rail');
-      if (r) {
-        r.classList.toggle('open', App.D.rail);
-        t.setAttribute('aria-expanded', String(App.D.rail));
-        t.setAttribute('aria-label', App.D.rail ? 'Collapse toolbar' : 'Expand toolbar');
-        t.title = App.D.rail ? 'Collapse the toolbar' : 'Expand the toolbar to show tool names';
-        t.querySelector('svg').outerHTML = IC[App.D.rail ? 'collapse' : 'expand'];
       }
       break;
     }

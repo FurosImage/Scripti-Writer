@@ -130,11 +130,18 @@ function layoutPara(p: Para, cols: number, indent: number): Seg[][] {
   return lines;
 }
 
+/** Plain notes as simple paragraphs, so they can be laid out like a manuscript. */
+export const notesHtml = (text: string) =>
+  String(text || '')
+    .split(/\n/)
+    .map((l) => `<p>${l.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c] as string) || '<br>'}</p>`)
+    .join('');
+
 export function manuscriptPdf(
   title: string,
   tpHtml: string,
   paras: Para[],
-  o: { paper: 'letter' | 'a4'; tpage: boolean },
+  o: { paper: 'letter' | 'a4'; tpage: boolean; foot?: string[] },
 ) {
   const { w, h } = PAPER[o.paper];
   const cols = Math.floor((w - 144) / CW),
@@ -154,6 +161,8 @@ export function manuscriptPdf(
     items.push({ x: w - X - about.length * CW, y: TOP, text: about });
     const center = [title.toUpperCase(), '', author ? 'by' : '', author].filter((x, i) => i < 2 || x);
     center.forEach((t, i) => items.push({ x: (w - t.length * CW) / 2, y: h / 2 - LH * 2 + i * LH, text: t }));
+    const F = o.foot || [];
+    F.forEach((t, i) => items.push({ x: X, y: h - TOP - (F.length - 1 - i) * LH, text: t }));
     pages.push({ items });
   }
   let items: any[] = [],
@@ -224,7 +233,7 @@ export function novelDocx(
   title: string,
   tpHtml: string,
   paras: Para[],
-  o: { paper: 'letter' | 'a4'; tpage: boolean },
+  o: { paper: 'letter' | 'a4'; tpage: boolean; foot?: string[] },
 ) {
   const P: string[] = [];
   const center = (t: string, size: number, bold: boolean, before = 0, after = 240, pageBreak = false) =>
@@ -234,6 +243,11 @@ export function novelDocx(
     const L = tpLines(tpHtml);
     if (!L.length) L.push(title);
     L.forEach((l, i) => P.push(center(l, i == 0 ? 40 : 24, i == 0, i == 0 ? 3600 : 0)));
+    (o.foot || []).forEach((l, i) =>
+      P.push(
+        `<w:p><w:pPr><w:spacing w:before="${i == 0 ? 4800 : 0}" w:after="0"/></w:pPr>${wRuns([{ t: l }], '<w:sz w:val="22"/>')}</w:p>`,
+      ),
+    );
     hadContent = true;
   }
   for (const p of paras) {
