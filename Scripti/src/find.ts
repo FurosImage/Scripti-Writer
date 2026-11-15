@@ -226,6 +226,11 @@ export function closeFind() {
 /** Open the bar (or focus it), starting with the selected text if there is some. */
 export function openFind() {
   if (!canSearch()) return toast('Find and replace works on the script and novel pages.');
+  if (App.book) {
+    // The two-page view is for reading; searching happens in the writing view.
+    App.book = false;
+    render();
+  }
   let b = bar();
   if (!b) {
     b = document.createElement('div');

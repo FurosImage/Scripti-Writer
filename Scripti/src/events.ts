@@ -27,7 +27,7 @@ import {
   sync,
 } from './project';
 import { App, flush, persist, save } from './state';
-import { $, $$, hasMk, MOD, toast, uid } from './utils';
+import { $, $$, hasMk, toast, uid } from './utils';
 import { closeFind, findOpen, openFind } from './find';
 import { cards } from './views/library';
 import { renumberScenes } from './views/script';
@@ -90,7 +90,7 @@ document.addEventListener('click', (e?: any) => {
       break;
     case 'lib':
       App.D.lib = !App.D.lib;
-      save();
+      persist();
       render();
       break;
     case 'make':
@@ -105,6 +105,7 @@ document.addEventListener('click', (e?: any) => {
       break;
     case 'home':
       App.P = null;
+      App.book = false;
       render();
       break;
     case 'delp':
@@ -123,7 +124,7 @@ document.addEventListener('click', (e?: any) => {
       break;
     case 'th':
       App.D.th = t.dataset.t;
-      save();
+      persist();
       render();
       break;
     case 'tab':
@@ -168,16 +169,31 @@ document.addEventListener('click', (e?: any) => {
       render();
       $('#rn')?.select();
       break;
-    case 'del':
+    case 'del': {
+      const P = App.P,
+        at = App.ctx.i,
+        gone = P.drafts[at];
+      if (!gone || P.drafts.length < 2) break;
       hpush();
-      App.P.drafts.splice(App.ctx.i, 1);
-      App.dr = Math.min(App.dr, App.P.drafts.length - 1);
+      P.drafts.splice(at, 1);
+      App.dr = Math.min(App.dr, P.drafts.length - 1);
       App.d2 = -1;
       App.ctx = null;
       hcommit();
       render();
-      toast(`Draft deleted. ${MOD}+Z in the script restores it.`);
+      toast(`“${gone.name}” deleted`, {
+        label: 'Undo',
+        fn: () => {
+          if (App.P !== P || P.drafts.includes(gone)) return;
+          hpush();
+          P.drafts.splice(Math.min(at, P.drafts.length), 0, gone);
+          App.dr = P.drafts.indexOf(gone);
+          hcommit();
+          render();
+        },
+      });
       break;
+    }
     case 'split':
       App.split = !App.split;
       App.tab = 'Script';
@@ -507,7 +523,7 @@ document.addEventListener('change', (e?: any) => {
   if (!c) return;
   if (c == 'th') {
     App.D.th = t.value;
-    save();
+    persist();
     render();
   } else if (c == 'fmt') {
     const b = App.P.drafts[App.F.d]?.blocks[App.F.i];

@@ -122,10 +122,22 @@ let timer: any = null;
 let writing: Promise<void> | null = null;
 let again = false;
 
-/** Load saved data from the device. Call once before the first render. */
-export async function initData() {
-  await idbOpen();
-  let d = await idbRead();
+/** True when the saved stories couldn't be read: nothing is written, so they stay as they are. */
+let locked = false;
+
+/**
+ * Load saved data from the device. Call once before the first render. Returns false when the
+ * saved stories couldn't be read; the app then must not go on (and saving is switched off), so an
+ * empty library is never saved over them.
+ */
+export async function initData(): Promise<boolean> {
+  const opened = await idbOpen();
+  const read = opened == 'fail' ? { ok: false, data: null } : await idbRead();
+  if (!read.ok) {
+    locked = true;
+    return false;
+  }
+  let d = read.data;
   if (!d) {
     try {
       d = JSON.parse(localStorage.getItem('scripti') || 'null');
@@ -140,6 +152,7 @@ export async function initData() {
   try {
     (navigator as any).storage?.persist?.();
   } catch (e) {}
+  return true;
 }
 
 function setSaved(s: string) {
@@ -157,6 +170,7 @@ export const save = () => {
 
 /** Schedule writing `App.D` to the device without marking any story as edited. */
 export function persist() {
+  if (locked) return;
   setSaved('saving');
   clearTimeout(timer);
   timer = setTimeout(flush, 400);
@@ -166,6 +180,7 @@ export function persist() {
 export async function flush() {
   clearTimeout(timer);
   timer = null;
+  if (locked) return;
   if (writing) {
     again = true;
     return writing;
@@ -195,3 +210,13 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState == 'hidden') flushIfPending();
 });
 addEventListener('pagehide', flushIfPending);
+
+// Desktop app: before the window closes, finish saving, then tell the app it may close.
+const desk = (window as any).scriptiDesktop;
+desk?.onClosing?.(async () => {
+  try {
+    await flush();
+  } finally {
+    desk.closeNow?.();
+  }
+});

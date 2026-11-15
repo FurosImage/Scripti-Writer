@@ -17,7 +17,7 @@ import { paintStatus, render } from './views/workspace';
 document.execCommand('defaultParagraphSeparator', false, 'p');
 
 async function boot() {
-  await initData();
+  if (!(await initData())) return storageProblem();
   const D = App.D;
   D.ps = D.ps.map(normalize);
   if ((D.seeded || 0) < 6) {
@@ -43,5 +43,21 @@ async function boot() {
   setupUpdates();
   setupBackups();
 }
+
+/** Shown instead of the app when the saved stories couldn't be read. Nothing is changed. */
+function storageProblem() {
+  const app = document.getElementById('app')!;
+  app.innerHTML = `<div class="main"><div class="menu sprob" role="alert"><h1>Scripti <span class="wr">Writer</span></h1>
+<p><b>Your stories couldn't be opened just now.</b></p>
+<p class="hint">They are still saved and nothing has been changed. Close Scripti Writer and open it again. If this keeps happening, restart your computer${(window as any).scriptiDesktop ? ', or bring your stories back from the Scripti Writer Backups folder with Import' : ''}.</p>
+<p><button class="big pri" id="sretry">Try again</button></p></div></div>`;
+  document.getElementById('sretry')!.onclick = () => location.reload();
+}
+
+// A file dropped on the window would otherwise replace the app with that file.
+for (const ev of ['dragover', 'drop'])
+  addEventListener(ev, (e) => {
+    if ((e as DragEvent).dataTransfer?.types?.includes('Files')) e.preventDefault();
+  });
 
 boot();

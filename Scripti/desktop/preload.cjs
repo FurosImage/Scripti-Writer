@@ -10,4 +10,9 @@ contextBridge.exposeInMainWorld('scriptiDesktop', {
   onUpdate: (cb) => ipcRenderer.on('update', (_e, info) => cb(info)),
   saveBackup: (name, json) => ipcRenderer.invoke('backup:save', String(name), String(json)),
   openBackups: () => ipcRenderer.invoke('backup:open'),
+  chooseBackupDir: () => ipcRenderer.invoke('backup:choose'),
+  backupDir: () => ipcRenderer.invoke('backup:dir'),
+  // Closing: the app asks the page to finish saving, and the page answers when it has.
+  onClosing: (cb) => ipcRenderer.on('app:closing', () => cb()),
+  closeNow: () => ipcRenderer.send('app:close-now'),
 });

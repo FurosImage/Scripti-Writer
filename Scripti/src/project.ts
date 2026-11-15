@@ -160,6 +160,7 @@ export function openP(p?: any) {
   App.P = p;
   App.dr = 0;
   App.split = false;
+  App.book = false;
   App.d2 = -1;
   App.tab = p.type == 'ideas' ? '' : 'Script';
   App.HU = [];
@@ -253,7 +254,13 @@ export function sync() {
 
 export function leaveBlock(k?: any) {
   if (!App.P || !k || App.P.type != 'ms') return;
-  if (k.t == 'scene') sync();
+  // Only count as an edit when something really changed (a new location or character).
+  let changed = false;
+  if (k.t == 'scene') {
+    const before = JSON.stringify(App.P.locs);
+    sync();
+    changed = JSON.stringify(App.P.locs) != before;
+  }
   if (k.t == 'character') {
     const c = cue(k.x).replace(/\s*\^$/, '');
     if (
@@ -263,7 +270,8 @@ export function leaveBlock(k?: any) {
     ) {
       App.P.chars.push({ id: uid(), n: titleCase(c), r: '', ge: '', ac: '', pal: [...PALETTE], p: '', m: '', g: '', d: '', col: nextCharCol() });
       toast(titleCase(c) + ' added to Characters');
+      changed = true;
     }
   }
-  save();
+  if (changed) save();
 }
