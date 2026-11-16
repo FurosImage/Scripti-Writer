@@ -145,7 +145,7 @@ export async function extraAction(a: string, t: any) {
       break;
     }
     case 'glow':
-      App.D.glow = !App.D.glow;
+      App.D.glow = App.D.glow === false;
       persist();
       render();
       break;
