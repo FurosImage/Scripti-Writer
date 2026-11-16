@@ -2,7 +2,7 @@
 
 # Scripti Writer <sup>Beta</sup>
 
-> **Early beta (current version: Beta v0.0.6).** Scripti Writer works and is ready to write in,
+> **Early beta (current version: Beta v0.0.7).** Scripti Writer works and is ready to write in,
 > but it is still changing, so you may run into bugs. Back up your stories now and then with
 > **Back up all**, or let the Mac and Windows apps do it for you with automatic backups.
 
@@ -38,7 +38,7 @@ Scripti Writer is in beta, and I'd love to hear how to make it better.
 - **Export** to PDF (industry page format), Word, Final Draft (.fdx), Fountain and text, or
   everything at once in one folder. **Import** from Fountain and Final Draft.
 - **Covers**: change a story's cover image or colour, or export a PDF, right from the library.
-- **Highlights and comments**, focus mode, four looks (Dark, Light, Paper / Warm, Night Warm),
+- **Highlights and comments**, focus mode, five looks (Dark, Light, Paper / Warm, Night Warm, Lamplight) with an optional soft glow,
   switchable in the library too.
 - Works **offline**. Stories save automatically as you type, always. The Mac and Windows apps
   finish saving before they close.

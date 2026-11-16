@@ -27,7 +27,7 @@ official hosted web version yet.
 - **Import**: Fountain, Final Draft and Scripti Writer backups. Imported stories are cleaned so a
   crafted file can't run code (`src/io/clean.ts`).
 - **Backups**: one file with every story; restoring never overwrites anything.
-- **Focus mode**, four looks (Dark, Light, Paper / Warm, Night Warm), keyboard shortcuts (press `?`).
+- **Focus mode**, five looks (Dark, Light, Paper / Warm, Night Warm, Lamplight) with an optional soft glow, keyboard shortcuts (press `?`).
 - **Find and replace** on the script and novel pages (`src/find.ts`).
 - **Automatic backups** (desktop app): one file per day in Documents/Scripti Writer Backups or a
   folder the writer picks, refreshed every 1 to 60 minutes and 3 to 90 days kept, both chosen in
@@ -146,7 +146,7 @@ src/
   io/                   storage (IndexedDB), files (export/import), clean (safe imports),
                         screenplay (pagination, Fountain, FDX), novel (manuscript, Word,
                         Markdown), pdf, zip, pwa
-  styles/               themes.css (four looks), app.css, board.css, full.css (dialogs, mobile)
+  styles/               themes.css (five looks, soft glow), app.css, board.css, full.css (dialogs, mobile)
 docs/SPEC.md            The product specification
 ```
 
