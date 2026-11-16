@@ -80,7 +80,7 @@ body[data-th='lamp'] {
    pages a brighter middle that darkens towards the edges. The middle glow follows the screen, so
    it stays in view on a long script. */
 body.glow {
-  background-image: var(--grain), radial-gradient(120% 90% at 25% 0%, var(--glow) 0%, var(--bg) 70%);
+  background-image: var(--grain), radial-gradient(120% 90% at 25% 0%, color-mix(in srgb, var(--glow) 60%, var(--bg)) 0%, var(--bg) 70%);
   background-attachment: scroll, fixed;
 }
 body.glow .page,
@@ -88,7 +88,13 @@ body.glow .prose,
 body.glow .tpsheet {
   background:
     var(--grain),
-    linear-gradient(to right, var(--pge) 0%, transparent 24%, transparent 76%, var(--pge) 100%),
-    radial-gradient(ellipse 55% 60% at 45% 45%, var(--glow) 0%, var(--pg) 100%) fixed,
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--pge) 60%, transparent) 0%,
+      transparent 24%,
+      transparent 76%,
+      color-mix(in srgb, var(--pge) 60%, transparent) 100%
+    ),
+    radial-gradient(ellipse 55% 60% at 45% 45%, color-mix(in srgb, var(--glow) 60%, var(--pg)) 0%, var(--pg) 100%) fixed,
     var(--pg);
 }
