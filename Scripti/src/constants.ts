@@ -70,6 +70,7 @@ export const THEMES = [
   ['light', 'Light'],
   ['paper', 'Paper / Warm'],
   ['night', 'Night Warm'],
+  ['lamp', 'Lamplight'],
 ];
 
 export const TN = { ms: 'Manuscript', novel: 'Novel', ideas: 'Ideas' };

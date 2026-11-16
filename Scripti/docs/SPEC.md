@@ -59,3 +59,6 @@ Master Prompt: Comprehensive Specifications for ScriptiPlease build/update Scrip
   find works from the book view; looks and clicks no longer mark a story as edited.
 - Beta v0.0.6: choose how often automatic backups refresh (1 to 60 minutes) and how many days
   to keep (3 to 90).
+- Beta v0.0.7: a fifth look, **Lamplight** (warm dark browns and cream, taken from a photo of a
+  lit wall); **Soft glow** in Settings (on by default): a gentle light behind the app, and on
+  script, novel and title pages a brighter middle fading to darker edges, with a fine grain.
