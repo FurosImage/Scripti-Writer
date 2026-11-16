@@ -122,7 +122,7 @@ export const BUILD_YEAR = __YEAR__;
 
 /**
  * Versions before 1.0.0 are betas and count up in small steps: 0.0.1, 0.0.2, 0.0.3 …
- * They are shown as "Beta 0.0.1". From 1.0.0 the plain number is shown.
+ * They are shown as "Beta v0.0.1". From 1.0.0 the number is shown as "v1.0.0".
  */
 export const isBetaVersion = (v: string) => /^v?0\./.test(v) || /beta/i.test(v);
 export const versionLabel = (v: string) => {
