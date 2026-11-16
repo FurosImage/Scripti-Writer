@@ -1,0 +1,20 @@
+# One-time tidy-up: puts a "v" before the number in the names of earlier releases
+# ("Scripti Writer Beta 0.0.6" becomes "Scripti Writer Beta v0.0.6"). Safe to run again.
+name: Rename releases
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          R: ${{ github.repository }}
+        run: |
+          gh api "repos/$R/releases?per_page=100" -q '.[]|[.id,.name]|@tsv' | while IFS=$'\t' read -r id name; do
+            new=$(printf '%s' "$name" | sed -E 's/Beta ([0-9])/Beta v\1/')
+            if [ "$new" != "$name" ]; then
+              gh api -X PATCH "repos/$R/releases/$id" -f name="$new" -q .name
+            fi
+          done

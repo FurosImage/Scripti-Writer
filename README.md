@@ -95,7 +95,7 @@ shared under the GPL-3.0.
 
 1. Upload the changed files into the `Scripti` folder (keep the same folder layout).
 2. Raise `"version"` in `Scripti/package.json` by one step: `0.0.1` → `0.0.2` → `0.0.3` …
-   Versions before `1.0.0` are shown as betas ("Beta 0.0.2"); `1.0.0` will be the first finished
+   Versions before `1.0.0` are shown as betas ("Beta v0.0.7"); `1.0.0` will be the first finished
    release. The update notice in the app compares this number with the newest release.
 3. **Actions → Build installers → Run workflow**. The new version appears on the Releases page with
    its checksums, and installed copies start showing the update notice.

@@ -127,7 +127,7 @@ export const BUILD_YEAR = __YEAR__;
 export const isBetaVersion = (v: string) => /^v?0\./.test(v) || /beta/i.test(v);
 export const versionLabel = (v: string) => {
   const n = v.replace(/^v/i, '').replace(/-.*$/, '');
-  return isBetaVersion(v) ? 'Beta ' + n : n;
+  return isBetaVersion(v) ? 'Beta v' + n : 'v' + n;
 };
 export const VERSION_LABEL = versionLabel(__VERSION__);
 export const IS_BETA = isBetaVersion(__VERSION__);

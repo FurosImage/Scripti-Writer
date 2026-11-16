@@ -57,7 +57,7 @@ jobs:
           v=$(node -p "require('./Scripti/package.json').version")
           echo "version=$v" >> "$GITHUB_OUTPUT"
           # 0.x versions are betas: 0.0.1 is shown as "Beta 0.0.1". From 1.0.0 the plain number.
-          case "$v" in 0.*) label="Beta ${v%%-*}" ;; *) label="$v" ;; esac
+          case "$v" in 0.*) label="Beta v${v%%-*}" ;; *) label="v$v" ;; esac
           echo "label=$label" >> "$GITHUB_OUTPUT"
       - uses: actions/download-artifact@v4
         with:
