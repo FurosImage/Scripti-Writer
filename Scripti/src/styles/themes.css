@@ -9,6 +9,7 @@
   --ac: #8db4f5;
   --hl: #e8c46845;
   --hlb: #d6b04a;
+  --glow: #1b2638; /* the brighter centre of the soft glow */
   color-scheme: dark;
   box-sizing: border-box;
   padding-top: env(safe-area-inset-top, 0px);
@@ -24,6 +25,7 @@ body[data-th='light'] {
   --ac: #a9680f;
   --hl: #ffe08a;
   --hlb: #c99400;
+  --glow: #ffffff;
   color-scheme: light;
 }
 body[data-th='paper'] {
@@ -36,6 +38,7 @@ body[data-th='paper'] {
   --ac: #7a4a2e;
   --hl: #f1d48a99;
   --hlb: #b7862a;
+  --glow: #faf5ee;
   color-scheme: light;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .12' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .3 0 0 0 0 .2 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23f)'/%3E%3C/svg%3E");
 }
@@ -49,6 +52,7 @@ body[data-th='night'] {
   --ac: #e0a458;
   --hl: #e0a45840;
   --hlb: #e0a458;
+  --glow: #2e261f;
 }
 body[data-th='lamp'] {
   /* Lamplight: six colours taken from a photo of a lit plaster wall. */
@@ -61,5 +65,12 @@ body[data-th='lamp'] {
   --ac: #bfb39f;
   --hl: #bfb39f40;
   --hlb: #bfb39f;
+  --glow: #40362d;
   color-scheme: dark;
+}
+
+/* Soft glow (Settings > Soft glow): a gentle light at the top left, fading into the look's background. */
+body.glow {
+  background-image: radial-gradient(120% 90% at 25% 0%, var(--glow) 0%, var(--bg) 70%);
+  background-attachment: fixed;
 }

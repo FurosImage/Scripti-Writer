@@ -144,6 +144,11 @@ export async function extraAction(a: string, t: any) {
       render();
       break;
     }
+    case 'glow':
+      App.D.glow = !App.D.glow;
+      persist();
+      render();
+      break;
     case 'book':
       App.book = !App.book;
       render();
