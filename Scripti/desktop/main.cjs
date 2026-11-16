@@ -190,6 +190,7 @@ function buildMenu() {
         cmd('Light', undefined, 'theme:light'),
         cmd('Paper / Warm', undefined, 'theme:paper'),
         cmd('Night Warm', undefined, 'theme:night'),
+        cmd('Lamplight', undefined, 'theme:lamp'),
         { type: 'separator' },
         { role: 'resetZoom' },
         { role: 'zoomIn' },

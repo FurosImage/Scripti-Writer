@@ -1,4 +1,4 @@
-/* Colour tokens for the four looks: Dark (default), Light, Paper / Warm, Night Warm. */
+/* Colour tokens for the five looks: Dark (default), Light, Paper / Warm, Night Warm, Lamplight. */
 :root {
   --bg: #0f1522;
   --pn: #161e2d;
@@ -49,4 +49,17 @@ body[data-th='night'] {
   --ac: #e0a458;
   --hl: #e0a45840;
   --hlb: #e0a458;
+}
+body[data-th='lamp'] {
+  /* Lamplight: six colours taken from a photo of a lit plaster wall. */
+  --bg: #2d2620;
+  --pn: #38302a;
+  --tx: #e0d5bf;
+  --mu: #9d9283;
+  --ln: #332b24;
+  --pg: #332b24;
+  --ac: #bfb39f;
+  --hl: #bfb39f40;
+  --hlb: #bfb39f;
+  color-scheme: dark;
 }
