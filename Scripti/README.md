@@ -13,10 +13,13 @@ official hosted web version yet.
 - **Screenplay editor**: industry formatting, smart line types (Enter and Tab), autocomplete for
   characters, locations and times of day, highlights with comments, scene list, live page count.
 - **Novel editor**: chapters and subheadings, scene breaks, chapter list, word count.
-- **Drafts**: as many as you like, side by side in split screen.
+- **Drafts**: as many as you like, side by side in split screen. Deleting one shows an Undo button.
+- **Page numbers** that follow the printed script, and a two-page **book view** for novels and
+  notes (`src/pages.ts`).
 - **Characters and locations** that fill in automatically from the script.
 - **Corkboard** and a **brainstorm board** with notes, scene and character cards, shapes, pencil,
-  arrows, connections, story beats and an act timeline. Pinch to zoom on touch screens.
+  arrows, connections, story beats and an act timeline. The tools sit in a floating bar at the
+  bottom, undo, redo and zoom in one at the top. Pinch to zoom on touch screens.
 - **Export**: "Everything (.zip)" puts the story in every format in one folder (PDF, Word, Final
   Draft, Fountain, text, a story bible and the Scripti Writer project file), ready for Windows or Mac.
   Screenplays also export alone as PDF (industry page format, optional scene numbers), Word,
@@ -26,10 +29,15 @@ official hosted web version yet.
 - **Backups**: one file with every story; restoring never overwrites anything.
 - **Focus mode**, four looks (Dark, Light, Paper / Warm, Night Warm), keyboard shortcuts (press `?`).
 - **Find and replace** on the script and novel pages (`src/find.ts`).
-- **Automatic backups** (desktop app): one file per day in Documents/Scripti Writer Backups, the
-  last 14 kept (`src/backup.ts`, written by `desktop/main.cjs`).
-- **Update notice** (desktop app): checks GitHub for a newer release and offers a Download button.
-  Nothing installs by itself (`src/update.ts`).
+- **Automatic backups** (desktop app): one file per day in Documents/Scripti Writer Backups or a
+  folder the writer picks, refreshed every 1 to 60 minutes and 3 to 90 days kept, both chosen in
+  the backups dialog (`src/backup.ts`, written by `desktop/main.cjs`, which also remembers the
+  folder in `desktop-settings.json` in the app's data folder).
+- **Update notice** (desktop app): checks GitHub for a newer release and offers a Download button,
+  also on demand from Settings → Check for updates. Nothing installs by itself (`src/update.ts`).
+- **Safe saving**: if the saved stories can't be read at start, the app stops and says so instead
+  of starting empty, so nothing is overwritten. The desktop app waits for the last save before it
+  closes, and files dropped on the window can't replace the app.
 - **About** dialog with the version, license and feedback links.
 
 ## Run it on your computer
@@ -89,6 +97,9 @@ and the Windows setup .exe and publishes them as a Release named after the versi
 **Build them on your own computer:** `npm install`, then `npm run mac` on a Mac or `npm run win` on
 Windows. The files appear in `release/`. `npm run desktop` opens the app without packaging it.
 
+Releases are named after the version with a "v": version `0.0.7` becomes "Scripti Writer Beta
+v0.0.7", tagged `v0.0.7`. Versions before `1.0.0` are betas.
+
 The apps aren't signed with an Apple Developer ID or a Windows code-signing certificate, so macOS
 and Windows ask writers to confirm the first time (install steps are in the
 [main README](../README.md)). Signing would remove those warnings; electron-builder's
@@ -127,6 +138,8 @@ src/
   update.ts             Update notice for the desktop app
   find.ts               Find and replace
   backup.ts             Automatic backups for the desktop app
+  pages.ts              Page numbers and the two-page book view
+  phonebars.ts          Toolbars on phones
   views/                One file per screen, plus dialogs.ts for every dialog and menu
   editor/               Script editor: caret, undo/redo, autocomplete, hover cards, comments, keys
   board/                Brainstorm board: rendering, actions, links, pointer and touch gestures

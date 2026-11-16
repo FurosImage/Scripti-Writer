@@ -11,7 +11,7 @@ Master Prompt: Comprehensive Specifications for ScriptiPlease build/update Scrip
 ## Later changes
 
 - Characters: each character gets its own colour automatically (changeable from 8 swatches); labelled fields for name, role, personality, motivation, goal and notes.
-- Brainstorm board: all tools on a left-side rail (select, pan, pencil, rectangle, circle, triangle, line, arrow, double arrow, note, scene card, character card, story beat, timeline); colour coding and a minimise button for nodes; resizable timeline with Act 1-3 and add/remove acts.
+- Brainstorm board (superseded in Beta v0.0.4, see below): all tools on a left-side rail (select, pan, pencil, rectangle, circle, triangle, line, arrow, double arrow, note, scene card, character card, story beat, timeline); colour coding and a minimise button for nodes; resizable timeline with Act 1-3 and add/remove acts.
 - Dark mode uses a soft blue-tinted palette instead of pure black and grey. Light mode unchanged.
 - Version 1.0 (full app): saving to IndexedDB with a live "Saved/Synced" indicator; backup and restore
   of all stories; import of Fountain, Final Draft and backups; export of screenplays (PDF in industry
@@ -30,8 +30,32 @@ Master Prompt: Comprehensive Specifications for ScriptiPlease build/update Scrip
 - Scene headings show a small "SCENE" label and the scene number before the heading, e.g.
   "SCENE 1. INT. LOCATION - DAY".
 - The library starts empty; the old test stories are removed. Stories the writer made are never removed by an update.
-- Brainstorm tool bar can expand to show each tool's full name; collapsed it shows a small name above
-  each icon. The choice is remembered.
+- Brainstorm tool bar can expand to show each tool's full name (superseded in Beta v0.0.4: the tools
+  now float at the bottom of the board, each with a small name under its icon).
 - A visible Library (home) button at the top left of every story.
 - Export "Everything (.zip)": PDF, Word (.docx), Final Draft, Fountain, text, a story bible (.docx) and
   the Scripti project file in one folder, with an "Open me first" guide. Screenplays also export to Word.
+
+## Scripti Writer betas
+
+- Renamed to **Scripti Writer**, licensed GPL-3.0. Versions before 1.0.0 are betas, shown as
+  "Beta v0.0.x". The desktop data folder stays `Scripti` so existing stories open.
+- Update notice: the desktop app checks GitHub, shows a banner, and nothing installs until the
+  writer clicks Download. Also in Settings → Check for updates and the Help menu.
+- About dialog: version, year, "Created by Marc Fussing Rosbach, built with Claude",
+  "© Furos Image", the GPL license, and feedback and bug-report buttons.
+- Find and replace (Ctrl/⌘+F) in scripts and novels; capitals are kept (MARA → NORA).
+- Character cards: name, role, gender, played by, personality, motivation, goal, and look and
+  style with a five-colour palette.
+- Beta v0.0.4: undo, redo and zoom in a floating island at the top of the board, the tools in an
+  island at the bottom; look switch in the library (no icon); title page details at the bottom
+  (produced by, copyright, date, email), also in exports; page numbers; two-page book view for
+  novels and notes; change a cover or colour and export a PDF from the library card menu; PDF
+  export for notes; tabs in the order Title Page, Script, Characters, Locations, Brainstorming,
+  Corkboard, centred; the story menu is now **Settings** (cover, split, focus, look, backups,
+  shortcuts, updates, about, delete) and a separate **Export** menu.
+- Beta v0.0.5: the library is never replaced when the saved stories can't be read; deleting a
+  draft can be undone; the desktop app finishes saving before closing; choose the backup folder;
+  find works from the book view; looks and clicks no longer mark a story as edited.
+- Beta v0.0.6: choose how often automatic backups refresh (1 to 60 minutes) and how many days
+  to keep (3 to 90).

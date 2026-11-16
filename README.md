@@ -2,8 +2,9 @@
 
 # Scripti Writer <sup>Beta</sup>
 
-> **Early beta.** Scripti Writer works and is ready to write in, but it is still
-> changing, so you may run into bugs. Back up your stories now and then with **Back up all**.
+> **Early beta (current version: Beta v0.0.6).** Scripti Writer works and is ready to write in,
+> but it is still changing, so you may run into bugs. Back up your stories now and then with
+> **Back up all**, or let the Mac and Windows apps do it for you with automatic backups.
 
 Scripti Writer is a free, open-source writing app for screenplays and novels: a quiet,
 distraction-free place to write, with industry-standard script formatting. It runs on Mac and
@@ -18,29 +19,37 @@ Scripti Writer is in beta, and I'd love to hear how to make it better.
 
 ## Features
 
+- **One place per story**, with tabs in writing order: Title Page, Script (or Novel), Characters,
+  Locations, Brainstorming and Corkboard. The **Settings** menu holds the cover, split screen, focus
+  mode, look, backups, shortcuts and updates; the **Export** menu holds every way to export.
 - **Screenplay editor** with industry formatting. Enter moves to the next line type, Tab changes it.
   Scene headings are numbered automatically ("SCENE 1. INT. LOCATION - DAY").
 - **Novel editor** with chapters, scene breaks and a chapter list.
 - **Page numbers** that match the printed script, and a **two-page book view** for novels and
   notes.
-- **Drafts** side by side in split screen, with undo and redo.
+- **Drafts** side by side in split screen, with undo and redo. Deleting a draft can be undone.
 - **Characters and locations** that fill in from the script, with colour coding. Each character
   has a card for role, gender, actor, personality, motivation, goal, and look and style with a
   five-colour palette.
 - **Corkboard** and a **brainstorm board**: sticky notes, scene and character cards, shapes,
-  pencil, arrows, story beats and an act timeline, with the tools in a floating toolbar.
+  pencil, arrows, story beats and an act timeline. The tools float at the bottom of the board, undo,
+  redo and zoom at the top.
 - **Title page** with produced by, copyright, date and email at the bottom.
 - **Export** to PDF (industry page format), Word, Final Draft (.fdx), Fountain and text, or
   everything at once in one folder. **Import** from Fountain and Final Draft.
 - **Covers**: change a story's cover image or colour, or export a PDF, right from the library.
-- **Highlights and comments**, focus mode, four looks (Dark, Light, Paper / Warm, Night Warm).
-- Works **offline**. Stories save automatically as you type.
+- **Highlights and comments**, focus mode, four looks (Dark, Light, Paper / Warm, Night Warm),
+  switchable in the library too.
+- Works **offline**. Stories save automatically as you type, always. The Mac and Windows apps
+  finish saving before they close.
 - **Find and replace** in scripts and novels. Renaming "Mara" also renames MARA.
-- **Automatic backups** (Mac and Windows apps): a copy of all your stories in a
-  "Scripti Writer Backups" folder, or a folder you choose. One file per day for the last two
-  weeks, refreshed every ten minutes while you write.
-- **Update notice**: the app tells you when a new version is out. Nothing installs until you click
-  Download.
+- **Automatic backups** (Mac and Windows apps): a copy of all your stories as one file per day, in
+  Documents/Scripti Writer Backups or a folder you choose. You pick how often it refreshes while
+  you write (1 minute to 1 hour, 10 minutes unless you change it) and how many days to keep
+  (3 to 90, 14 unless you change it). Find it under **Settings → Automatic backups and save
+  folder…**.
+- **Update notice**: the app tells you when a new version is out, and **Settings → Check for
+  updates** asks right away. Nothing installs until you click Download.
 - **About** page with the version, license, and buttons to send feedback or report a bug.
 
 ## Download and install
@@ -94,9 +103,10 @@ shared under the GPL-3.0.
 ## Releasing a new version
 
 1. Upload the changed files into the `Scripti` folder (keep the same folder layout).
-2. Raise `"version"` in `Scripti/package.json` by one step: `0.0.1` → `0.0.2` → `0.0.3` …
-   Versions before `1.0.0` are shown as betas ("Beta v0.0.7"); `1.0.0` will be the first finished
-   release. The update notice in the app compares this number with the newest release.
+2. Raise `"version"` in `Scripti/package.json` by one step: `0.0.6` → `0.0.7` → `0.0.8` …
+   Versions before `1.0.0` are shown as betas: the release is named "Scripti Writer Beta v0.0.7"
+   and tagged `v0.0.7`. `1.0.0` will be the first finished release. The update notice in the app
+   compares this number with the newest release.
 3. **Actions → Build installers → Run workflow**. The new version appears on the Releases page with
    its checksums, and installed copies start showing the update notice.
 
@@ -110,8 +120,9 @@ Scripti/                      The app (source code, see Scripti/README.md for de
   docs/SPEC.md                Product specification
 LICENSE                       GNU General Public License v3.0
 TRADEMARK.md                  About the name and logo
-.github/workflows/
-  installers.yml              Builds the Mac .dmg and Windows .exe and publishes the release
+.github/
+  workflows/installers.yml    Builds the Mac .dmg and Windows .exe and publishes the release
+  ISSUE_TEMPLATE/             The "Report a bug" and "Feedback or an idea" forms
 ```
 
 ## Building it yourself
