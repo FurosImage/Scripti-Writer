@@ -11,6 +11,8 @@
   --hlb: #d6b04a;
   --glow: #1b2638; /* the brighter centre of the soft glow */
   --pge: #0e1320; /* the darker edges of the page glow */
+  /* Fine grain laid over the soft glow, so it isn't perfectly smooth. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
   color-scheme: dark;
   box-sizing: border-box;
   padding-top: env(safe-area-inset-top, 0px);
@@ -74,17 +76,18 @@ body[data-th='lamp'] {
   color-scheme: dark;
 }
 
-/* Soft glow (Settings > Soft glow, on by default): a gentle light behind the app, and on the
+/* Soft glow (Settings > Soft glow, on by default): a gentle light with fine grain behind the app, and on the
    pages a brighter middle that darkens towards the edges. The middle glow follows the screen, so
    it stays in view on a long script. */
 body.glow {
-  background-image: radial-gradient(120% 90% at 25% 0%, var(--glow) 0%, var(--bg) 70%);
-  background-attachment: fixed;
+  background-image: var(--grain), radial-gradient(120% 90% at 25% 0%, var(--glow) 0%, var(--bg) 70%);
+  background-attachment: scroll, fixed;
 }
 body.glow .page,
 body.glow .prose,
 body.glow .tpsheet {
   background:
+    var(--grain),
     linear-gradient(to right, var(--pge) 0%, transparent 24%, transparent 76%, var(--pge) 100%),
     radial-gradient(ellipse 55% 60% at 45% 45%, var(--glow) 0%, var(--pg) 100%) fixed,
     var(--pg);
