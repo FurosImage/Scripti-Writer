@@ -717,3 +717,51 @@ mark {
     transition: none !important;
   }
 }
+
+/* Soft glow switch in Settings. The checkbox is hidden; the track and knob show its state. */
+.glowsw {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+  cursor: pointer;
+}
+.glowsw input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+.glowsw i {
+  position: relative;
+  flex: none;
+  width: 34px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--ln);
+  transition: background 0.15s;
+}
+.glowsw i::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--mu);
+  transition: transform 0.15s;
+}
+.glowsw input:checked + i {
+  background: var(--ac);
+}
+.glowsw input:checked + i::after {
+  transform: translateX(14px);
+  background: var(--bg);
+}
+.glowsw input:focus-visible + i {
+  outline: 2px solid var(--ac);
+  outline-offset: 2px;
+}
