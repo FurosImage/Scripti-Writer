@@ -2,7 +2,7 @@
 
 # Scripti Writer <sup>Beta</sup>
 
-> **Early beta (current version: Beta v0.0.7).** Scripti Writer works and is ready to write in,
+> **Early beta (current version: Beta v0.0.8).** Scripti Writer works and is ready to write in,
 > but it is still changing, so you may run into bugs. Back up your stories now and then with
 > **Back up all**, or let the Mac and Windows apps do it for you with automatic backups.
 

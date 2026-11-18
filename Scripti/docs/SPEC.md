@@ -62,3 +62,4 @@ Master Prompt: Comprehensive Specifications for ScriptiPlease build/update Scrip
 - Beta v0.0.7: a fifth look, **Lamplight** (warm dark browns and cream, taken from a photo of a
   lit wall); **Soft glow** in Settings (on by default): a gentle light behind the app, and on
   script, novel and title pages a brighter middle fading to darker edges, with a fine grain.
+- Beta v0.0.8: a new app icon; Soft glow is a switch in Settings that keeps the menu open.
