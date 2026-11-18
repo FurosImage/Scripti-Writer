@@ -525,6 +525,10 @@ document.addEventListener('change', (e?: any) => {
     App.D.th = t.value;
     persist();
     render();
+  } else if (c == 'glow') {
+    App.D.glow = t.checked;
+    persist();
+    document.body.classList.toggle('glow', t.checked);
   } else if (c == 'fmt') {
     const b = App.P.drafts[App.F.d]?.blocks[App.F.i];
     if (b) {

@@ -126,7 +126,7 @@ Scripti Writer backup file.
 index.html              Page shell, fonts, app manifest
 public/                 App icons, manifest, service worker (offline support)
 desktop/                Mac and Windows app (Electron): window, menu bar, update download, preload bridge
-build/                  App icon (icon.png) and logo (logo.svg)
+build/                  App icons: icon.png (Mac, with padding) and icon-win.png (Windows)
 src/
   main.ts               Start-up: load data, migrate, render, install support, update check
   state.ts              The single app state (App) and debounced saving

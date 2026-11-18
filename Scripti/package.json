@@ -1,7 +1,7 @@
 {
   "name": "scripti",
   "private": true,
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Scripti Writer: a free, open-source writing app for screenplays and novels.",
   "type": "module",
   "scripts": {
@@ -57,7 +57,7 @@
       "artifactName": "Scripti-Writer-${version}-mac.dmg"
     },
     "win": {
-      "icon": "build/icon.png",
+      "icon": "build/icon-win.png",
       "target": [
         {
           "target": "nsis",
