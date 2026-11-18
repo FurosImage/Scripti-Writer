@@ -1,16 +1,16 @@
 /* Colour tokens for the five looks: Dark (default), Light, Paper / Warm, Night Warm, Lamplight. */
 :root {
-  --bg: #0f1522;
-  --pn: #161e2d;
-  --tx: #dce4f0;
-  --mu: #8591a7;
-  --ln: #27324a;
-  --pg: #131a28;
-  --ac: #8db4f5;
+  --bg: #121417;
+  --pn: #1a1c21;
+  --tx: #e3e5e9;
+  --mu: #8c919b;
+  --ln: #2b2f37;
+  --pg: #16181d;
+  --ac: #a9bcd3;
   --hl: #e8c46845;
   --hlb: #d6b04a;
-  --glow: #1b2638; /* the brighter centre of the soft glow */
-  --pge: #0e1320; /* the darker edges of the page glow */
+  --glow: #1f2227; /* the brighter centre of the soft glow */
+  --pge: #0f1013; /* the darker edges of the page glow */
   /* Fine grain laid over the soft glow, so it isn't perfectly smooth. */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
   color-scheme: dark;

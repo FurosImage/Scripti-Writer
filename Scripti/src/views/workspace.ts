@@ -21,7 +21,7 @@ import { sceneNav, script } from './script';
 import { title } from './titlePage';
 
 const THEME_BG: Record<string, string> = {
-  dark: '#0f1522',
+  dark: '#121417',
   light: '#f4f4f1',
   paper: '#F4EBE1',
   night: '#1E1915',

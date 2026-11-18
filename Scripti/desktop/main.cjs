@@ -225,7 +225,7 @@ function createWindow() {
     minWidth: 380,
     minHeight: 480,
     title: NAME,
-    backgroundColor: '#0f1522',
+    backgroundColor: '#121417',
     show: false,
     // Window and taskbar icon on Windows and Linux (the Mac app uses its bundle icon).
     ...(isMac ? {} : { icon: path.join(__dirname, '..', 'dist', 'icons', 'icon-512.png') }),
