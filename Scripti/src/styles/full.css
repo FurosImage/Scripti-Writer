@@ -1247,7 +1247,12 @@ body.focus .prose {
 .tpsheet {
   display: flex;
   flex-direction: column;
-  min-height: 760px;
+  /* Same size as a Script page: 720px wide, 800px tall at least. */
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  min-height: 800px;
+  box-sizing: border-box;
   background: var(--pg);
   border: 1px solid var(--ln);
 }
@@ -1294,6 +1299,11 @@ body.focus .prose {
 @media (max-width: 600px) {
   .tpsheet {
     min-height: 0;
+    max-width: none;
+    /* Full width of the phone, like the Script page. */
+    width: 100vw;
+    margin: 0 0 0 calc(50% - 50vw);
+    border-width: 0 0 1px;
   }
   .tpfoot {
     grid-template-columns: 1fr;
