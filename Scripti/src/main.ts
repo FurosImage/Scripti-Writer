@@ -3,6 +3,7 @@ import './styles/themes.css';
 import './styles/app.css';
 import './styles/board.css';
 import './styles/full.css';
+import './editor/multisel';
 import './events';
 import './board/events';
 import './board/touch';

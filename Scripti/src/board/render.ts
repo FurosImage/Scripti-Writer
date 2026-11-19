@@ -111,34 +111,34 @@ export function tlHTML(o?: any) {
   const n = o.acts.length,
     c = colv(o.col),
     H = o.or != 'v',
-    ls = `stroke:${c};stroke-width:4;stroke-linecap:round`,
-    ts = `stroke:${c};stroke-width:3;stroke-linecap:round`;
+    ls = `stroke:${c};stroke-width:7;stroke-linecap:round`,
+    ts = `stroke:${c};stroke-width:5;stroke-linecap:round`;
   let g = '',
     lab = '';
   if (H) {
-    const y = o.h - 14;
+    const y = o.h - 18;
     g = `<line class="hitp" x1="0" y1="${y}" x2="${o.w}" y2="${y}"/><line x1="0" y1="${y}" x2="${o.w}" y2="${y}" style="${ls}"/>`;
     for (let i = 0; i <= n; i++) {
       const x = (i * o.w) / n;
-      g += `<line x1="${x}" y1="${y - 9}" x2="${x}" y2="${y + 9}" style="${ts}"/>`;
+      g += `<line x1="${x}" y1="${y - 14}" x2="${x}" y2="${y + 14}" style="${ts}"/>`;
     }
     lab = o.acts
       .map(
         (a?: any, i?: any) =>
-          `<span class="tx act" data-act="${i}" data-tid="${o.id}" style="left:${((i + 0.5) * 100) / n}%;bottom:30px;transform:translateX(-50%);color:${c}">${esc(a)}</span>`,
+          `<span class="tx act" data-act="${i}" data-tid="${o.id}" style="left:${((i + 0.5) * 100) / n}%;bottom:40px;transform:translateX(-50%);color:${c}">${esc(a)}</span>`,
       )
       .join('');
   } else {
-    const x = 14;
+    const x = 18;
     g = `<line class="hitp" x1="${x}" y1="0" x2="${x}" y2="${o.h}"/><line x1="${x}" y1="0" x2="${x}" y2="${o.h}" style="${ls}"/>`;
     for (let i = 0; i <= n; i++) {
       const y = (i * o.h) / n;
-      g += `<line x1="${x - 9}" y1="${y}" x2="${x + 9}" y2="${y}" style="${ts}"/>`;
+      g += `<line x1="${x - 14}" y1="${y}" x2="${x + 14}" y2="${y}" style="${ts}"/>`;
     }
     lab = o.acts
       .map(
         (a?: any, i?: any) =>
-          `<span class="tx act" data-act="${i}" data-tid="${o.id}" style="left:34px;top:${((i + 0.5) * 100) / n}%;transform:translateY(-50%);color:${c}">${esc(a)}</span>`,
+          `<span class="tx act" data-act="${i}" data-tid="${o.id}" style="left:44px;top:${((i + 0.5) * 100) / n}%;transform:translateY(-50%);color:${c}">${esc(a)}</span>`,
       )
       .join('');
   }

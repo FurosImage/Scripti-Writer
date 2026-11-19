@@ -48,7 +48,14 @@ export function delSel() {
   board();
 }
 
+/** Where a tool dragged onto the canvas was dropped (canvas units), while its item is added. */
+let dropAt: number[] | null = null;
+export function setDrop(p: number[] | null) {
+  dropAt = p;
+}
+
 export function nextPos(w?: any, h?: any) {
+  if (dropAt) return [Math.round(dropAt[0] - w / 2), Math.round(dropAt[1] - h / 2)];
   const r = $('#bd').getBoundingClientRect(),
     B = App.P.board,
     k = ((B.n.length + B.c.length) % 7) * 20;

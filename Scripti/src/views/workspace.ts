@@ -9,6 +9,7 @@ import { canAutoBackup } from '../backup';
 import { App } from '../state';
 import { $, $$, esc, words } from '../utils';
 import { showBars } from '../phonebars';
+import { paintZoom } from '../zoom';
 import { findRefresh } from '../find';
 import { bookButton, bookView, paintPages } from '../pages';
 import { chars } from './characters';
@@ -21,11 +22,10 @@ import { sceneNav, script } from './script';
 import { title } from './titlePage';
 
 const THEME_BG: Record<string, string> = {
-  dark: '#0f1522',
+  dark: '#1c1e22',
   light: '#f4f4f1',
   paper: '#F4EBE1',
-  night: '#1E1915',
-  lamp: '#1d1814',
+  night: '#28221d',
 };
 
 export function work() {
@@ -56,7 +56,7 @@ ${
       ? `<div class="bar nb"><span class="sp"></span>${bookButton()}<span class="sp"></span></div>${bookView()}`
       : `<div class="main"><div class="wrap"><div class="hd"><h2>Story ideas</h2><span class="hint" id="iwc"></span>${bookButton()}</div><textarea class="ideas" data-c="ideas" placeholder="Raw notes and ideas…">${esc(P.ideas)}</textarea></div></div>`
     : `
-<div class="bar tabs"><span class="tside"></span><div class="tabset" role="tablist">${T.map((t?: any) => `<button class="tab ${t == App.tab ? 'on' : ''}" role="tab" aria-selected="${t == App.tab}" data-a="tab" data-t="${t}">${P.type == 'novel' && t == 'Script' ? 'Novel' : t}</button>`).join('')}</div><span class="tside r">${App.tab == 'Script' ? `<button data-a="split" class="splitb ${App.split ? 'on tool' : ''}" title="Split screen: show two drafts side by side">◫ Split</button>` : ''}</span></div>
+<div class="bar tabs"><span class="tside"></span><div class="tabset" role="tablist">${T.map((t?: any, i?: number) => `${i && (t == 'Characters' || t == 'Brainstorming') ? '<span class="tgap" aria-hidden="true"></span>' : ''}<button class="tab ${t == App.tab ? 'on' : ''}" role="tab" aria-selected="${t == App.tab}" data-a="tab" data-t="${t}">${P.type == 'novel' && t == 'Script' ? 'Novel' : t}</button>`).join('')}</div><span class="tside r">${App.tab == 'Script' ? `<button data-a="split" class="splitb ${App.split ? 'on tool' : ''}" title="Split screen: show two drafts side by side">◫ Split</button>` : ''}</span></div>
 ${showDr ? `<div class="dt">${P.drafts.map((d?: any, i?: any) => (App.ren == i ? `<input id="rn" value="${esc(d.name)}" data-i="${i}" aria-label="Draft name">` : `<button class="${i == App.dr ? 'on' : ''}" data-a="dr" data-i="${i}" title="Double-click to rename">${esc(d.name)}</button>${i == App.dr ? `<button class="dtm" data-a="drmenu" data-i="${i}" aria-label="Options for ${esc(d.name)}" title="Duplicate, rename or delete">⋯</button>` : ''}`)).join('')}<button data-a="drnew" title="New blank draft" aria-label="New draft">+</button></div>` : ''}
 ${view()}`
 }${App.focus ? '<button class="fexit" data-a="focus" title="Leave focus mode (Esc)">Exit focus</button>' : ''}${dialog()}${ctxMenu()}`;
@@ -82,6 +82,7 @@ export function render() {
   $('#cpop')?.remove();
   $('#app').innerHTML = App.P ? work() : menu();
   showBars();
+  paintZoom();
   // On narrow screens the tab bar scrolls: keep the open tab in view.
   const tabOn = $('.tabs .tab.on') as HTMLElement | null,
     tabBar = tabOn?.closest('.tabs') as HTMLElement | null;
@@ -131,7 +132,10 @@ export function paintStatus() {
   let t = '',
     cls = '';
   if (App.saved == 'error') ((t = 'Not saved'), (cls = 'bad'));
-  else t = App.saved == 'saving' ? 'Saving…' : App.P ? 'Saved' : 'Stories are saved on this device';
+  else {
+    t = App.saved == 'saving' ? 'Saving…' : App.P ? 'Saved' : 'Stories are saved on this device';
+    if (App.saved != 'saving') cls = 'ok'; // green dot once everything is saved
+  }
   el.textContent = t;
   el.className = 'st ' + cls;
   el.title = 'Saved on this device. Use “Back up all” in the library to keep a copy.';

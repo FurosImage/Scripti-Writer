@@ -63,3 +63,12 @@ Master Prompt: Comprehensive Specifications for ScriptiPlease build/update Scrip
   lit wall); **Soft glow** in Settings (on by default): a gentle light behind the app, and on
   script, novel and title pages a brighter middle fading to darker edges, with a fine grain.
 - Beta v0.0.8: a new app icon; Soft glow is a switch in Settings that keeps the menu open.
+- Beta v0.0.9: script zoom (70% to 180%); the save dot turns green when saved; a privacy note in
+  About; an optional watermark on PDF exports (diagonal, across or in the corner); tabs grouped
+  as Title Page, Script | Characters, Locations, Corkboard | Brainstorming; looks renamed Night,
+  Night Warm, Light and Light Warm (Lamplight removed, the Night looks a little brighter and less
+  blue); Soft glow on by default with flat writing pages; the title page the same size as the
+  script page; the script page stays centred with the side panel to its right; select text across
+  many script lines (drag, Shift+click, Ctrl/⌘+A); drag Note, Acts, scenes, characters and beats
+  from the tool bar onto the board; thicker timeline lines; novel pages are A4 sheets with gaps
+  like Word; the two-page view is a landscape spread you can write on.

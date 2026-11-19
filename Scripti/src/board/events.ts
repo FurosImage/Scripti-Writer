@@ -1,5 +1,5 @@
 // Pointer, wheel and flyout handling for the brainstorm board.
-import { addC, bsnap, refreshSel, tmpDraw, toCanvas, zoomAt } from './actions';
+import { addC, bsnap, refreshSel, setDrop, tmpDraw, toCanvas, zoomAt } from './actions';
 import { anc, drawLinks, rectOf } from './links';
 import { props } from './props';
 import { board, findO, rerender, tf, updHandles } from './render';
@@ -408,4 +408,67 @@ document.addEventListener(
     drawLinks();
   },
   { passive: false },
+);
+
+// Drag a tool onto the canvas: press on Note, Timeline, a scene, a character or a beat, drag it
+// over the board and let go to drop it there. A plain click still adds it in the middle.
+const DROP = '.rail [data-a=note], .rail [data-a=tl], .flyd [data-a=bsc], .flyd [data-a=bch], .flyd [data-a=beat]';
+let tdrag: { el: HTMLElement; sx: number; sy: number; ghost?: HTMLElement; id: number } | null = null;
+let eatClick = false;
+
+document.addEventListener('pointerdown', (e: PointerEvent) => {
+  if (!App.P || App.tab != 'Brainstorming' || e.button != 0) return;
+  const el = (e.target as HTMLElement).closest?.(DROP) as HTMLElement | null;
+  if (el) tdrag = { el, sx: e.clientX, sy: e.clientY, id: e.pointerId };
+});
+
+document.addEventListener('pointermove', (e: PointerEvent) => {
+  if (!tdrag || e.pointerId != tdrag.id) return;
+  if (!tdrag.ghost) {
+    if (Math.hypot(e.clientX - tdrag.sx, e.clientY - tdrag.sy) < 6) return;
+    const g = document.createElement('div');
+    g.className = 'dropghost';
+    g.innerHTML = tdrag.el.innerHTML;
+    document.body.append(g);
+    tdrag.ghost = g;
+    try {
+      tdrag.el.releasePointerCapture?.(e.pointerId);
+    } catch (_) {}
+  }
+  e.preventDefault();
+  tdrag.ghost.style.left = e.clientX + 'px';
+  tdrag.ghost.style.top = e.clientY + 'px';
+  const over = !!(document.elementFromPoint(e.clientX, e.clientY) as HTMLElement)?.closest('#bd');
+  tdrag.ghost.classList.toggle('ok', over);
+});
+
+function endToolDrag(e: PointerEvent, drop: boolean) {
+  const d = tdrag;
+  tdrag = null;
+  if (!d?.ghost) return;
+  d.ghost.remove();
+  eatClick = true;
+  setTimeout(() => (eatClick = false), 0);
+  if (!drop || !(document.elementFromPoint(e.clientX, e.clientY) as HTMLElement)?.closest('#bd')) return;
+  $$('details.fly[open]').forEach((x: HTMLDetailsElement) => (x.open = false));
+  setDrop(toCanvas(e));
+  try {
+    d.el.click();
+  } finally {
+    setDrop(null);
+  }
+}
+document.addEventListener('pointerup', (e: PointerEvent) => endToolDrag(e, true), true);
+document.addEventListener('pointercancel', (e: PointerEvent) => endToolDrag(e, false), true);
+// The browser's own click after a drag would add a second item in the middle.
+document.addEventListener(
+  'click',
+  (e: MouseEvent) => {
+    if (eatClick && e.isTrusted) {
+      eatClick = false;
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  },
+  true,
 );

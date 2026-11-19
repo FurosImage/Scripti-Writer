@@ -2,7 +2,7 @@
 
 # Scripti Writer <sup>Beta</sup>
 
-> **Early beta (current version: Beta v0.0.8).** Scripti Writer works and is ready to write in,
+> **Early beta (current version: Beta v0.0.9).** Scripti Writer works and is ready to write in,
 > but it is still changing, so you may run into bugs. Back up your stories now and then with
 > **Back up all**, or let the Mac and Windows apps do it for you with automatic backups.
 
@@ -38,7 +38,7 @@ Scripti Writer is in beta, and I'd love to hear how to make it better.
 - **Export** to PDF (industry page format), Word, Final Draft (.fdx), Fountain and text, or
   everything at once in one folder. **Import** from Fountain and Final Draft.
 - **Covers**: change a story's cover image or colour, or export a PDF, right from the library.
-- **Highlights and comments**, focus mode, five looks (Dark, Light, Paper / Warm, Night Warm, Lamplight) with an optional soft glow,
+- **Highlights and comments**, focus mode, four looks (Night, Night Warm, Light, Light Warm) with a soft glow you can turn off,
   switchable in the library too.
 - Works **offline**. Stories save automatically as you type, always. The Mac and Windows apps
   finish saving before they close.
@@ -75,6 +75,13 @@ shortcuts and an uninstaller.
 These warnings appear because the app is not signed with a paid Apple or Microsoft certificate.
 Each release lists a SHA-256 checksum for every file, so you can check that your download is the
 real one.
+
+## Privacy
+
+Scripti Writer has no account and no tracking, and never sends your writing anywhere. Your
+stories are saved only on your device. The app loads its fonts from Google Fonts, and the Mac and
+Windows apps ask GitHub for the latest version number. These are ordinary web requests that
+don't include your writing. The same note is in the app under **Settings → About**.
 
 ## Important
 

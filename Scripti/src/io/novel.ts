@@ -1,5 +1,5 @@
 // Novel export: standard manuscript PDF, Word (.docx), Markdown and plain text.
-import { makePdf, PAPER } from './pdf';
+import { makePdf, PAPER, watermarkOf } from './pdf';
 import { tpLines } from './screenplay';
 import { zip } from './zip';
 
@@ -204,7 +204,7 @@ export function manuscriptPdf(
     else layoutPara(p, cols, 5).forEach(emit);
     first = false;
   }
-  return makePdf(pages, w, h, title);
+  return makePdf(pages, w, h, title, watermarkOf(o));
 }
 
 /* ---------- Word, Markdown, text ---------- */

@@ -49,34 +49,94 @@ function scriptNumbers() {
   }
 }
 
-function novelNumbers() {
-  const nv = $('#nv') as HTMLElement | null;
+/* Novel pages, like Word: separate A4 sheets with a gap between them. The text is one editable
+   area laid over the sheets; a paragraph that would run past the bottom margin of a sheet is
+   moved down to the top of the next one (with padding set from a style sheet, so the saved
+   text never changes). Only a paragraph longer than a whole page runs across the gap. */
+const GAP = 28;
+
+function novelSheets() {
+  const nv = $('#nv:not(.sp2)') as HTMLElement | null;
   const pane = nv?.parentElement;
   if (!nv || !pane) return;
-  pane.querySelector('.pgl')?.remove();
-  const pageH = (nv.clientWidth * 11) / 8.5;
-  if (pageH < 100) return;
-  const n = Math.max(1, Math.ceil(nv.scrollHeight / pageH));
-  const layer = document.createElement('div');
-  layer.className = 'pgl';
-  layer.setAttribute('aria-hidden', 'true');
+  let st = document.getElementById('nvpg') as HTMLStyleElement | null;
+  if (!st) {
+    st = document.createElement('style');
+    st.id = 'nvpg';
+    document.head.append(st);
+  }
+  const W = nv.clientWidth;
+  if (W < 100) return;
+  const H = Math.round((W * 297) / 210),
+    cs = getComputedStyle(nv),
+    MT = parseFloat(cs.paddingTop) || 0,
+    MB = parseFloat(cs.paddingBottom) || 0,
+    room = H - MT - MB,
+    step = H + GAP;
+  // Measure where everything sits with no pushes, then work out the pushes in one go.
+  st.textContent = '';
+  const kids = Array.from(nv.children) as HTMLElement[];
+  const box = kids.map((k) => [k.offsetTop, k.offsetHeight]);
+  let shift = 0,
+    css = '',
+    end = MT;
+  kids.forEach((k, i) => {
+    const top = box[i][0] + shift,
+      h = box[i][1],
+      pg = Math.floor(top / step),
+      bottom = top + h,
+      limit = pg * step + H - MB,
+      inGap = top > pg * step + H - MB;
+    if ((bottom > limit || inGap) && h <= room && h > 0) {
+      const d = (pg + 1) * step + MT - top;
+      shift += d;
+      css += `#nv:not(.sp2)>:nth-child(${i + 1}){padding-top:${d}px!important}`;
+      end = top + d + h;
+    } else end = bottom;
+  });
+  st.textContent = css;
+  const pages = Math.max(1, Math.floor(Math.max(0, end - 1) / step) + 1);
+  nv.style.minHeight = pages * step - GAP + 'px';
+  nv.style.setProperty('--pgh', H + 'px');
+  // The sheets behind the text, numbered at the bottom.
+  let layer = pane.querySelector('.nvs') as HTMLElement | null;
+  if (!layer) {
+    layer = document.createElement('div');
+    layer.className = 'nvs';
+    layer.setAttribute('aria-hidden', 'true');
+    pane.prepend(layer);
+  }
   layer.style.top = nv.offsetTop + 'px';
-  layer.append(marker(14, 1, true));
-  for (let k = 1; k < n; k++) layer.append(marker(Math.round(k * pageH), k + 1));
-  pane.append(layer);
+  while (layer.children.length > pages) layer.lastElementChild!.remove();
+  while (layer.children.length < pages) {
+    const n = layer.children.length + 1,
+      d = document.createElement('div');
+    d.className = 'nvsh';
+    d.innerHTML = `<span>${n}</span>`;
+    layer.append(d);
+  }
+  (Array.from(layer.children) as HTMLElement[]).forEach((d, i) => {
+    d.style.top = i * step + 'px';
+    d.style.height = H + 'px';
+  });
 }
 
 /** Draw the page numbers (after a render, and a moment after typing stops). */
 export function paintPages() {
   if (!App.P) return;
-  if (App.book && $('#book')) return paintBook();
+  if (App.book) return $('#book') ? paintBook() : paintSpread();
   if (App.tab != 'Script') return;
   if (App.P.type == 'ms') scriptNumbers();
-  else if (App.P.type == 'novel') novelNumbers();
+  else if (App.P.type == 'novel') novelSheets();
 }
 
 document.addEventListener('input', (e) => {
   const t = e.target as HTMLElement;
+  // Novel sheets follow the text straight away, so nothing is ever written into a gap.
+  if (t?.id == 'nv' && !App.book) {
+    requestAnimationFrame(novelSheets);
+    return;
+  }
   if (!t?.closest?.('.page, #nv')) return;
   clearTimeout(timer);
   timer = setTimeout(paintPages, 400);
@@ -207,8 +267,92 @@ export function paintBook() {
 }
 
 export const bookButton = () =>
-  `<button data-a="book" class="${App.book ? 'on' : ''}" title="${App.book ? 'Back to writing' : 'Two-page book view'}" aria-pressed="${!!App.book}"><span aria-hidden="true">📖</span><span class="tlab"> ${App.book ? 'Back to writing' : 'Two pages'}</span></button>`;
+  `<button data-a="book" class="${App.book ? 'on' : ''}" title="${App.book ? 'Back to one page' : 'Two pages side by side'}" aria-pressed="${!!App.book}"><span aria-hidden="true">📖</span><span class="tlab"> ${App.book ? 'One page' : 'Two pages'}</span></button>`;
 
 /** The book view in place of the editor. */
 export const bookView = () =>
   `<div class="main"><div class="bookw"><p class="hint bookhint">Book view, for reading and checking. <span id="bookinfo"></span></p><div class="book" id="book"></div></div></div>`;
+
+/* ---------- two-page spread for writing ---------- */
+
+/** Width of one spread (one page on phones): the distance the text moves per page turn. */
+const spreadW = (nv: HTMLElement) => nv.clientWidth;
+
+/** The page numbers and "Pages 3–4 of 9" for the spread on screen. */
+export function paintSpread() {
+  const nv = $('#nv.sp2') as HTMLElement | null;
+  if (!nv) return;
+  const W = spreadW(nv);
+  if (W < 50) return;
+  const two = getComputedStyle(nv).columnCount != '1',
+    per = two ? 2 : 1;
+  // How many pages the text fills: the column the last bit of text sits in.
+  let pages = 1;
+  const last = nv.lastChild;
+  if (last) {
+    const r = document.createRange();
+    r.selectNodeContents(last);
+    const rs = r.getClientRects(),
+      box = nv.getBoundingClientRect();
+    const x = rs.length ? rs[rs.length - 1].left - box.left + nv.scrollLeft : 0;
+    pages = Math.max(1, Math.floor(x / (W / per)) + 1);
+  }
+  const k = Math.round(nv.scrollLeft / W),
+    first = k * per + 1;
+  const l = $('.sp2n.l'),
+    rt = $('.sp2n.r');
+  if (l) l.textContent = String(first);
+  if (rt) rt.textContent = two ? String(first + 1) : '';
+  const info = $('#sp2info');
+  if (info)
+    info.textContent =
+      per == 2 ? `Pages ${first}–${first + 1} of ${Math.max(pages, first)}` : `Page ${first} of ${Math.max(pages, first)}`;
+  const prev = $('[data-a=sp2prev]') as HTMLButtonElement,
+    next = $('[data-a=sp2next]') as HTMLButtonElement;
+  if (prev) prev.disabled = k == 0;
+  if (next) next.disabled = first + per > pages;
+}
+
+/** Turn the pages: -1 back, +1 forward. */
+export function turnSpread(dir: number) {
+  const nv = $('#nv.sp2') as HTMLElement | null;
+  if (!nv) return;
+  const W = spreadW(nv);
+  nv.scrollLeft = (Math.round(nv.scrollLeft / W) + dir) * W;
+  paintSpread();
+}
+
+// Keep the text lined up on whole spreads (the browser scrolls a little to follow the cursor).
+document.addEventListener(
+  'scroll',
+  (e) => {
+    const nv = e.target as HTMLElement;
+    if (!(nv instanceof HTMLElement) || !nv.matches('#nv.sp2')) return;
+    const W = spreadW(nv),
+      want = Math.round(nv.scrollLeft / W) * W;
+    if (Math.abs(nv.scrollLeft - want) > 1) nv.scrollLeft = want;
+    paintSpread();
+  },
+  true,
+);
+// Mouse wheel or trackpad over the sheet turns the pages.
+let wheelT = 0;
+document.addEventListener(
+  'wheel',
+  (e) => {
+    const nv = (e.target as HTMLElement)?.closest?.('.sheet2')?.querySelector('#nv.sp2');
+    if (!nv) return;
+    e.preventDefault();
+    const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (Math.abs(d) < 8 || Date.now() - wheelT < 350) return;
+    wheelT = Date.now();
+    turnSpread(d > 0 ? 1 : -1);
+  },
+  { passive: false },
+);
+
+// Font or size changes move the text, so lay the sheets out again.
+document.addEventListener('change', (e) => {
+  const c = (e.target as HTMLElement)?.dataset?.c;
+  if (c == 'nf' || c == 'ns' || c == 'np') requestAnimationFrame(paintPages);
+});

@@ -1247,7 +1247,12 @@ body.focus .prose {
 .tpsheet {
   display: flex;
   flex-direction: column;
-  min-height: 760px;
+  /* Same size as a Script page: 720px wide, 800px tall at least. */
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  min-height: 800px;
+  box-sizing: border-box;
   background: var(--pg);
   border: 1px solid var(--ln);
 }
@@ -1294,6 +1299,11 @@ body.focus .prose {
 @media (max-width: 600px) {
   .tpsheet {
     min-height: 0;
+    max-width: none;
+    /* Full width of the phone, like the Script page. */
+    width: 100vw;
+    margin: 0 0 0 calc(50% - 50vw);
+    border-width: 0 0 1px;
   }
   .tpfoot {
     grid-template-columns: 1fr;
@@ -1616,4 +1626,192 @@ body.focus .prose {
   min-width: 0;
   overflow-wrap: anywhere;
   font-weight: 500;
+}
+
+/* Wide screens: the page stays in the middle of the window, and the side panel (scenes,
+   comments, notes) sits in the space to its right instead of pushing the page left. */
+@media (min-width: 1101px) {
+  .panes:not(:has(> .pane ~ .pane)) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, calc(var(--pw, 720px) * var(--sz, 1))) minmax(248px, 1fr);
+    column-gap: 0;
+  }
+  .panes:not(:has(> .pane ~ .pane)) > .pane {
+    grid-column: 2;
+    grid-row: 1;
+    max-width: none;
+  }
+  .panes:not(:has(> .pane ~ .pane)) > .side {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: start;
+    margin-left: 18px;
+  }
+}
+
+/* Novel pages are A4: 210 × 297 mm, about 794 px wide on screen. The sheet is at least one
+   page tall and grows with the text; the faint page lines mark each A4 page. */
+.panes:has(#nv) {
+  --pw: 794px;
+}
+.panes:has(#nv) > .pane {
+  max-width: var(--pw);
+}
+#nv:not(.sp2) {
+  position: relative;
+  z-index: 1;
+  min-height: calc(var(--pw) * 297 / 210);
+  padding: 96px 96px;
+  box-sizing: border-box;
+  background: transparent;
+  border: 0;
+  box-shadow: none !important;
+}
+.panes:has(#nv:not(.sp2)) > .pane {
+  position: relative;
+}
+/* The A4 sheets behind the novel text. */
+.nvs {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.nvsh {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: var(--pg);
+  border: 1px solid var(--ln);
+  box-sizing: border-box;
+}
+body.glow .nvsh {
+  box-shadow: 0 1px 3px var(--shadow, #0003), 0 6px 22px var(--shadow, #0003);
+}
+body.focus .nvsh {
+  background: transparent;
+  border-color: color-mix(in srgb, var(--ln) 40%, transparent);
+}
+.nvsh span {
+  position: absolute;
+  bottom: 36px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font: 11px 'Instrument Sans', system-ui, sans-serif;
+  color: var(--mu);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 860px) {
+  #nv:not(.sp2) {
+    padding: 32px 24px;
+  }
+  .nvsh span {
+    bottom: 10px;
+  }
+}
+
+/* Two pages: a landscape sheet (two A4 pages side by side) with a line down the middle. The text
+   runs in two columns; when both are full it carries on to the next spread. */
+.spreadw {
+  padding: 20px 16px 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.sheet2 {
+  --m: 64px;
+  position: relative;
+  /* As wide as fits, but never taller than the window. */
+  width: min(1200px, 100%, calc((100dvh - 250px) * 420 / 297));
+  min-width: min(640px, 100%);
+  aspect-ratio: 420 / 297;
+  background: var(--pg);
+  border: 1px solid var(--ln);
+  box-sizing: border-box;
+}
+body.glow .sheet2 {
+  box-shadow: 0 1px 3px var(--shadow, #0003), 0 8px 28px var(--shadow, #0003);
+}
+#nv.sp2 {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  box-sizing: border-box;
+  padding: var(--m) var(--m) calc(var(--m) + 8px);
+  columns: 2;
+  column-gap: calc(var(--m) * 2);
+  column-fill: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  line-height: 1.6;
+}
+/* The line down the middle stays put while the text moves on to the next pages. */
+.sheet2::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: var(--m);
+  bottom: var(--m);
+  border-left: 1px solid color-mix(in srgb, var(--mu) 45%, transparent);
+  pointer-events: none;
+}
+#nv.sp2::-webkit-scrollbar {
+  display: none;
+}
+#nv.sp2 h1:not(:first-child) {
+  break-before: column;
+}
+#nv.sp2 p {
+  margin: 0 0 0.6em;
+}
+.sp2n {
+  position: absolute;
+  bottom: 18px;
+  font: 11px 'Instrument Sans', system-ui, sans-serif;
+  color: var(--mu);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+.sp2n.l {
+  left: 25%;
+}
+.sp2n.r {
+  left: 75%;
+}
+.sp2bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sp2bar button {
+  min-width: 40px;
+  min-height: 36px;
+  font-size: 18px;
+}
+@media (max-width: 880px) {
+  .sheet2 {
+    --m: 24px;
+    aspect-ratio: 210 / 297;
+    width: min(560px, 100%);
+  }
+  #nv.sp2 {
+    columns: 1;
+  }
+  .sheet2::after {
+    display: none;
+  }
+  .sp2n.l {
+    left: 50%;
+  }
+  .sp2n.r {
+    display: none;
+  }
 }

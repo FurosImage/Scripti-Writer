@@ -1,16 +1,17 @@
-/* Colour tokens for the five looks: Dark (default), Light, Paper / Warm, Night Warm, Lamplight. */
+/* Colour tokens for the four looks: Night (default, id 'dark'), Night Warm, Light, Light Warm (id 'paper'). */
 :root {
-  --bg: #0f1522;
-  --pn: #161e2d;
-  --tx: #dce4f0;
-  --mu: #8591a7;
-  --ln: #27324a;
-  --pg: #131a28;
-  --ac: #8db4f5;
+  --bg: #1c1e22;
+  --pn: #24272c;
+  --tx: #e3e5e9;
+  --mu: #959aa4;
+  --ln: #373b44;
+  --pg: #212328;
+  --ac: #a9bcd3;
   --hl: #e8c46845;
   --hlb: #d6b04a;
-  --glow: #1b2638; /* the brighter centre of the soft glow */
-  --pge: #0e1320; /* the darker edges of the page glow */
+  --glow: #2a2d33; /* the brighter centre of the soft glow */
+  --pge: #17181c; /* the darker edges of the page glow */
+  --shadow: rgba(0, 0, 0, 0.45); /* soft shadow under the page when Soft glow is on */
   /* Fine grain laid over the soft glow, so it isn't perfectly smooth. */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
   color-scheme: dark;
@@ -30,6 +31,7 @@ body[data-th='light'] {
   --hlb: #c99400;
   --glow: #ffffff;
   --pge: #ebebe7;
+  --shadow: rgba(60, 40, 20, 0.14);
   color-scheme: light;
 }
 body[data-th='paper'] {
@@ -44,41 +46,27 @@ body[data-th='paper'] {
   --hlb: #b7862a;
   --glow: #faf5ee;
   --pge: #e9dccb;
+  --shadow: rgba(80, 55, 25, 0.18);
   color-scheme: light;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .12' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .3 0 0 0 0 .2 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23f)'/%3E%3C/svg%3E");
 }
 body[data-th='night'] {
-  --bg: #1e1915;
-  --pn: #27211b;
+  --bg: #28221d;
+  --pn: #312a23;
   --tx: #e6d5c3;
-  --mu: #a08f7d;
-  --ln: #3a3029;
-  --pg: #241e19;
+  --mu: #a8978a;
+  --ln: #463b32;
+  --pg: #2e2721;
   --ac: #e0a458;
   --hl: #e0a45840;
   --hlb: #e0a458;
-  --glow: #2e261f;
-  --pge: #1b1612;
-}
-body[data-th='lamp'] {
-  /* Lamplight: six colours taken from a photo of a lit plaster wall. */
-  --bg: #1d1814;
-  --pn: #27211c;
-  --tx: #e0d5bf;
-  --mu: #9d9283;
-  --ln: #3a3129;
-  --pg: #2a231d;
-  --ac: #bfb39f;
-  --hl: #bfb39f40;
-  --hlb: #bfb39f;
-  --glow: #3e352c;
-  --pge: #1d1814;
-  color-scheme: dark;
+  --glow: #3a3128;
+  --pge: #221c17;
+  --shadow: rgba(0, 0, 0, 0.5);
 }
 
-/* Soft glow (Settings > Soft glow, on by default): a gentle light with fine grain behind the app, and on the
-   pages a brighter middle that darkens towards the edges. The middle glow follows the screen, so
-   it stays in view on a long script. */
+/* Soft glow (Settings > Soft glow, on by default): a gentle light with fine grain in the background
+   around the pages. The pages themselves stay flat. */
 body.glow {
   background-image: var(--grain), radial-gradient(120% 90% at 25% 0%, color-mix(in srgb, var(--glow) 60%, var(--bg)) 0%, var(--bg) 70%);
   background-attachment: scroll, fixed;
@@ -86,15 +74,8 @@ body.glow {
 body.glow .page,
 body.glow .prose,
 body.glow .tpsheet {
-  background:
-    var(--grain),
-    linear-gradient(
-      to right,
-      color-mix(in srgb, var(--pge) 60%, transparent) 0%,
-      transparent 24%,
-      transparent 76%,
-      color-mix(in srgb, var(--pge) 60%, transparent) 100%
-    ),
-    radial-gradient(ellipse 55% 60% at 45% 45%, color-mix(in srgb, var(--glow) 60%, var(--pg)) 0%, var(--pg) 100%) fixed,
-    var(--pg);
+  /* The page you write on stays flat (one plain colour). The soft shadow lifts it off the glow. */
+  box-shadow:
+    0 1px 3px var(--shadow),
+    0 10px 28px -6px var(--shadow);
 }

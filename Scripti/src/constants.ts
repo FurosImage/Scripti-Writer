@@ -1,6 +1,6 @@
 // Fixed lists and lookup tables shared across the app.
 
-export const TABS = ['Title Page', 'Script', 'Characters', 'Locations', 'Brainstorming', 'Corkboard'];
+export const TABS = ['Title Page', 'Script', 'Characters', 'Locations', 'Corkboard', 'Brainstorming'];
 
 export const TYPES = [
   ['scene', 'Scene Heading'],
@@ -66,11 +66,10 @@ export const TIMES = [
 ];
 
 export const THEMES = [
-  ['dark', 'Dark'],
-  ['light', 'Light'],
-  ['paper', 'Paper / Warm'],
+  ['dark', 'Night'],
   ['night', 'Night Warm'],
-  ['lamp', 'Lamplight'],
+  ['light', 'Light'],
+  ['paper', 'Light Warm'],
 ];
 
 export const TN = { ms: 'Manuscript', novel: 'Novel', ideas: 'Ideas' };

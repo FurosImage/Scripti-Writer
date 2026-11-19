@@ -66,8 +66,58 @@ function encodeText(s: string) {
   return o;
 }
 
+/** A light grey watermark drawn under the text of every page. */
+export interface Watermark {
+  text: string;
+  /** 'diag' corner to corner, 'horiz' across the middle, 'corner' small at the bottom right */
+  layout: 'diag' | 'horiz' | 'corner';
+  /** 1 (light) to 5 (strong) */
+  strength: number;
+}
+
+/** The watermark chosen in the export options, or undefined when it's off or has no text. */
+export function watermarkOf(o: any): Watermark | undefined {
+  const text = String(o?.wmt || '').trim();
+  if (!o?.wm || !text) return undefined;
+  const layout = ['diag', 'horiz', 'corner'].includes(o.wml) ? o.wml : 'diag';
+  return { text, layout, strength: Math.max(1, Math.min(5, Math.round(+o.wms || 2))) };
+}
+
+/** Grey level for each strength (1 = palest). Drawn under the text, so no transparency is needed. */
+const WM_GREY = [0.93, 0.89, 0.85, 0.8, 0.74];
+
+/** PDF drawing commands for a watermark. Courier is monospaced: every character is 0.6 em wide. */
+function watermarkOps(m: Watermark, w: number, h: number) {
+  const n = [...m.text].length;
+  let size: number,
+    a = 1,
+    b = 0,
+    x: number,
+    y: number;
+  if (m.layout == 'corner') {
+    size = 9;
+    x = Math.max(54, w - 54 - n * 0.6 * size);
+    y = 30;
+  } else if (m.layout == 'horiz') {
+    size = Math.min(72, (w * 0.8) / (n * 0.6));
+    x = (w - n * 0.6 * size) / 2;
+    y = h / 2 - size * 0.3;
+  } else {
+    const ang = Math.atan2(h, w),
+      len = () => n * 0.6 * size;
+    size = Math.min(96, (Math.hypot(w, h) * 0.7) / (n * 0.6));
+    a = Math.cos(ang);
+    b = Math.sin(ang);
+    // Centre the middle of the text (not its baseline) on the middle of the page.
+    x = w / 2 - (a * len()) / 2 + b * size * 0.3;
+    y = h / 2 - (b * len()) / 2 - a * size * 0.3;
+  }
+  const f = (v: number) => v.toFixed(2);
+  return `q ${WM_GREY[m.strength - 1]} g BT /F2 ${f(size)} Tf ${f(a)} ${f(b)} ${f(-b)} ${f(a)} ${f(x)} ${f(y)} Tm (${encodeText(m.text)}) Tj ET Q\n`;
+}
+
 /** Build a PDF. Width and height are in points (72 per inch). */
-export function makePdf(pages: PdfPage[], w: number, h: number, title = ''): Uint8Array {
+export function makePdf(pages: PdfPage[], w: number, h: number, title = '', wm?: Watermark): Uint8Array {
   const objs: string[] = [];
   const add = (s: string) => (objs.push(s), objs.length);
   const catalog = add(''),
@@ -78,7 +128,7 @@ export function makePdf(pages: PdfPage[], w: number, h: number, title = ''): Uin
   const fontRes = (Object.keys(FONTS) as Font[]).map((k, i) => `/${FN[k]} ${fontIds[i]} 0 R`).join(' ');
   const kids: number[] = [];
   for (const pg of pages) {
-    let s = '';
+    let s = wm ? watermarkOps(wm, w, h) : '';
     for (const t of pg.items) {
       if (!t.text) continue;
       const size = t.size || 12;

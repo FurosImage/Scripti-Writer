@@ -765,3 +765,163 @@ mark {
   outline: 2px solid var(--ac);
   outline-offset: 2px;
 }
+
+/* Script page zoom (toolbar − 100% +). On larger screens the whole page grows; on phones the
+   text grows and wraps inside the screen width. */
+.pane {
+  zoom: var(--sz, 1);
+}
+@media (max-width: 700px) {
+  .pane {
+    zoom: 1;
+  }
+  .page {
+    font-size: calc(16px * var(--sz, 1));
+  }
+}
+.zm {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-right: 8px;
+}
+.zm button {
+  min-width: 30px;
+}
+.zm .zv {
+  min-width: 52px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.zm button:disabled {
+  opacity: 0.4;
+}
+
+/* A divider before Brainstorming, so it sits apart from the other tabs. */
+.tgap {
+  flex: none;
+  align-self: center;
+  width: 1px;
+  height: 18px;
+  margin: 0 10px;
+  background: var(--ln);
+}
+
+/* Watermark options in the export window, with a small page preview. The preview page is white
+   like the printed PDF, in every look. */
+.wmo {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ln);
+}
+.wmf {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 10px;
+}
+.wml {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--mu);
+}
+.wml input[type='range'] {
+  accent-color: var(--ac);
+}
+.wml input[type='text'] {
+  width: 100%;
+  box-sizing: border-box;
+  letter-spacing: 0.06em;
+}
+.wmo .seg {
+  display: flex;
+  gap: 6px;
+}
+.wmo .seg button {
+  flex: 1;
+}
+.wmo .seg button.on {
+  border-color: var(--ac);
+  color: var(--ac);
+}
+.wmf [disabled] {
+  opacity: 0.45;
+  cursor: default;
+}
+.wmpg {
+  position: relative;
+  flex: none;
+  width: 120px;
+  height: 155px;
+  box-sizing: border-box;
+  padding: 16px 14px;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--ln);
+  box-shadow: 0 4px 14px var(--shadow, rgba(0, 0, 0, 0.3));
+}
+.wmpg i {
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+  background: #cfcfcf;
+}
+.wmpg i:nth-child(3n + 2) {
+  margin: 0 20px 0 32px;
+}
+.wmpg b {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Courier Prime', Courier, monospace;
+  font-weight: 700;
+  color: #444;
+  white-space: nowrap;
+}
+.wmpg b.wm-diag {
+  transform: translate(-50%, -50%) rotate(-52deg);
+}
+.wmpg b.wm-corner {
+  left: auto;
+  top: auto;
+  right: 10px;
+  bottom: 8px;
+  transform: none;
+}
+.wmpg.off b {
+  display: none;
+}
+@media (max-width: 600px) {
+  .wmpg {
+    display: none;
+  }
+}
+
+/* Phones: the save status shows just its dot (green when saved), so it never gets squeezed. */
+@media (max-width: 600px) {
+  .st {
+    flex: none;
+    max-width: none;
+    font-size: 0;
+  }
+  .st:not(:empty):before {
+    margin-right: 0;
+  }
+}
+
+/* Selecting across many script lines: the page is briefly one editable area. */
+.page.msel {
+  outline: 0;
+  caret-color: transparent;
+}
+.page.msel .b:focus {
+  background: none;
+}

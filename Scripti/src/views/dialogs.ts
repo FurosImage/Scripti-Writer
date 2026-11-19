@@ -36,10 +36,29 @@ ${
 <label><input type="checkbox" data-c="exptp" ${o.tpage ? 'checked' : ''}> Title page</label>
 ${P.type == 'ms' ? `<label><input type="checkbox" data-c="expscn" ${o.scn ? 'checked' : ''}> Scene numbers</label>` : ''}</div>`
     : ''
-}
+}${o.fmt == 'pdf' || o.fmt == 'zip' ? watermarkOpts(o) : ''}
 <div class="mfoot"><button data-a="mclose">Cancel</button><button class="pri" data-a="expgo">Export</button></div>`,
     'wide',
   );
+}
+
+/** Watermark choices for PDF export, with a small preview of a page. */
+function watermarkOpts(o: any) {
+  const L: [string, string][] = [
+      ['diag', 'Diagonal'],
+      ['horiz', 'Horizontal'],
+      ['corner', 'Corner'],
+    ],
+    off = o.wm ? '' : 'disabled',
+    n = Math.max(1, [...(o.wmt || '')].length),
+    size = o.wml == 'corner' ? 6 : o.wml == 'horiz' ? Math.min(18, 96 / (n * 0.6)) : Math.min(22, 137 / (n * 0.6)),
+    alpha = [0.18, 0.27, 0.36, 0.48, 0.6][(o.wms || 2) - 1];
+  return `<div class="wmo"><div class="wmf">
+<label class="glowsw"><span>Watermark</span><input type="checkbox" data-c="expwm" ${o.wm ? 'checked' : ''}><i aria-hidden="true"></i></label>
+<label class="wml">Text<input type="text" data-c="expwmt" value="${esc(o.wmt || '')}" maxlength="40" placeholder="CONFIDENTIAL" ${off}></label>
+<div class="seg" role="radiogroup" aria-label="Watermark layout">${L.map(([v, l]) => `<button class="${o.wml == v ? 'on' : ''}" role="radio" aria-checked="${o.wml == v}" data-a="wml" data-t="${v}" ${off}>${l}</button>`).join('')}</div>
+<label class="wml">Strength<input type="range" min="1" max="5" step="1" data-c="expwms" value="${o.wms || 2}" ${off}></label>
+</div><div class="wmpg ${o.wm ? '' : 'off'}" aria-hidden="true">${'<i></i>'.repeat(10)}<b class="wm-${o.wml}" style="font-size:${size.toFixed(1)}px;opacity:${alpha}">${esc(o.wmt || '')}</b></div></div>`;
 }
 
 const K = (k: string) =>
@@ -97,6 +116,8 @@ export function aboutDialog() {
 <p>A quiet place to write screenplays and novels. Free and open source.</p>
 <p class="hint">Created by Marc Fussing Rosbach, built with Claude</p>
 ${desktop ? '<p><button data-a="updcheck">Check for updates</button></p>' : ''}
+<h3>Privacy</h3>
+<p class="hint">Your stories are saved only on this device. ${APP_NAME} has no account and no tracking, and never sends your writing anywhere. It loads its fonts from Google Fonts${desktop ? ' and checks GitHub for new versions' : ''}: ordinary web requests that don't include your writing.</p>
 <h3>Feedback</h3>
 <p class="hint">${APP_NAME} is in beta, so you may run into bugs. Ideas and reports make it better. Both open a short form on GitHub (needs a free account).</p>
 <p class="arow">${ext(FEEDBACK_URL, 'Send feedback or an idea', 'pri')}${ext(BUG_URL, 'Report a bug')}</p>

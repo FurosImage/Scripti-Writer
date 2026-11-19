@@ -579,6 +579,12 @@ document.addEventListener('change', (e?: any) => {
     if (g) g.innerHTML = cards();
   } else if (c == 'exppaper') App.exp.paper = t.value;
   else if (c == 'exptp') App.exp.tpage = t.checked;
+  else if (c == 'expwm' || c == 'expwmt' || c == 'expwms') {
+    if (c == 'expwm') App.exp.wm = t.checked;
+    else if (c == 'expwmt') App.exp.wmt = t.value.slice(0, 40);
+    else App.exp.wms = +t.value;
+    render();
+  }
   else if (c == 'ab') {
     App.D.ab = t.checked;
     persist();

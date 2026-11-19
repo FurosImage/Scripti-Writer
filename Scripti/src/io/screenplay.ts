@@ -1,5 +1,5 @@
 // Screenplay layout (industry page format), Fountain and Final Draft (.fdx) conversion.
-import { makePdf, PAPER, PdfPage } from './pdf';
+import { makePdf, PAPER, PdfPage, watermarkOf } from './pdf';
 
 export type Block = { id?: string; t: string; x: string; h?: string };
 
@@ -279,7 +279,7 @@ export function screenplayPdf(
     });
     out.push({ items });
   });
-  return makePdf(out, w, h, title);
+  return makePdf(out, w, h, title, watermarkOf(o));
 }
 
 /* ---------- Fountain ---------- */

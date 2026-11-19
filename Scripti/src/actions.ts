@@ -1,5 +1,6 @@
 // Actions added for the full app: export/import, backups, library menus, focus mode, side panel,
 // install, and board extras. Dispatched from the click switch in events.ts.
+import { turnSpread } from './pages';
 import { editTx, goScene } from './board/actions';
 import { linkedScene } from './board/render';
 import { COV, TYPES } from './constants';
@@ -144,6 +145,21 @@ export async function extraAction(a: string, t: any) {
       render();
       break;
     }
+    case 'wml':
+      App.exp.wml = t.dataset.t;
+      render();
+      break;
+    case 'szo':
+    case 'szi':
+    case 'sz1':
+      import('./zoom').then((m) => m.zoomScript(a == 'szi' ? 1 : a == 'szo' ? -1 : 0));
+      break;
+    case 'sp2prev':
+      turnSpread(-1);
+      break;
+    case 'sp2next':
+      turnSpread(1);
+      break;
     case 'book':
       App.book = !App.book;
       render();

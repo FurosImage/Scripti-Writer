@@ -71,7 +71,17 @@ export interface AppState {
   /** Library search text */
   q: string;
   /** Export dialog choices */
-  exp: { fmt: string; paper: 'letter' | 'a4'; tpage: boolean; scn: boolean };
+  exp: {
+    fmt: string;
+    paper: 'letter' | 'a4';
+    tpage: boolean;
+    scn: boolean;
+    /** Watermark on PDF pages: on or off, its text, layout and strength (1 to 5) */
+    wm: boolean;
+    wmt: string;
+    wml: 'diag' | 'horiz' | 'corner';
+    wms: number;
+  };
   /** Local save status: 'saved' | 'saving' | 'error' */
   saved: string;
 }
@@ -109,7 +119,7 @@ export const App: AppState = {
   focus: false,
   side: false,
   q: '',
-  exp: { fmt: '', paper: 'letter', tpage: true, scn: false },
+  exp: { fmt: '', paper: 'letter', tpage: true, scn: false, wm: false, wmt: 'CONFIDENTIAL', wml: 'diag', wms: 2 },
   saved: 'saved',
 };
 
@@ -145,7 +155,7 @@ export async function initData(): Promise<boolean> {
   }
   if (d && typeof d == 'object') App.D = d;
   App.D.ps = Array.isArray(App.D.ps) ? App.D.ps : [];
-  App.D.th = App.D.th || 'dark';
+  if (!['dark', 'night', 'light', 'paper'].includes(App.D.th)) App.D.th = 'dark';
   if (App.D.lib === undefined) App.D.lib = true;
   App.D.known = App.D.known || {};
   App.D.dels = App.D.dels || {};

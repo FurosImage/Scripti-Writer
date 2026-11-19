@@ -186,11 +186,10 @@ function buildMenu() {
       submenu: [
         cmd('Focus Mode', 'CmdOrCtrl+Shift+F', 'focus', true),
         { type: 'separator' },
-        cmd('Dark', undefined, 'theme:dark'),
-        cmd('Light', undefined, 'theme:light'),
-        cmd('Paper / Warm', undefined, 'theme:paper'),
+        cmd('Night', undefined, 'theme:dark'),
         cmd('Night Warm', undefined, 'theme:night'),
-        cmd('Lamplight', undefined, 'theme:lamp'),
+        cmd('Light', undefined, 'theme:light'),
+        cmd('Light Warm', undefined, 'theme:paper'),
         { type: 'separator' },
         { role: 'resetZoom' },
         { role: 'zoomIn' },
@@ -225,7 +224,7 @@ function createWindow() {
     minWidth: 380,
     minHeight: 480,
     title: NAME,
-    backgroundColor: '#0f1522',
+    backgroundColor: '#1c1e22',
     show: false,
     // Window and taskbar icon on Windows and Linux (the Mac app uses its bundle icon).
     ...(isMac ? {} : { icon: path.join(__dirname, '..', 'dist', 'icons', 'icon-512.png') }),
